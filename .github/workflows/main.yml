@@ -27,15 +27,15 @@ jobs:
         - '3.14'
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.1
 
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@v6.1.0
       with:
         python-version: ${{ matrix.python-version }}
         allow-prereleases: true
 
     - name: Install uv
-      uses: astral-sh/setup-uv@v7
+      uses: astral-sh/setup-uv@v7.1.6
       with:
         enable-cache: true
 
@@ -43,7 +43,7 @@ jobs:
       run: uvx --with tox-uv tox run -f py$(echo ${{ matrix.python-version }} | tr -d .)
 
     - name: Upload coverage data
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6.0.0
       with:
         name: coverage-data-${{ matrix.python-version }}
         path: '${{ github.workspace }}/.coverage.*'
@@ -55,20 +55,20 @@ jobs:
     runs-on: ubuntu-24.04
     needs: tests
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.1
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v6.1.0
         with:
           python-version: '3.13'
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@v7.1.6
 
       - name: Install dependencies
         run: uv pip install --system coverage[toml]
 
       - name: Download data
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7.0.0
         with:
           path: ${{ github.workspace }}
           pattern: coverage-data-*
@@ -84,7 +84,7 @@ jobs:
 
       - name: Upload HTML report
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: html-report
           path: htmlcov
@@ -100,11 +100,11 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.1
 
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v7.1.6
 
       - name: Build
         run: uv build
 
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@v1.13.0
