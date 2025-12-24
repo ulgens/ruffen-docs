@@ -36,7 +36,7 @@ repos:
       - id: rstcheck
         language: python
         additional_dependencies:
-          - tomli==2.0.1
+          - tomli==2.3.0
 
   - repo: https://github.com/adamchainz/blacken-docs
     rev: 1.20.0
@@ -44,7 +44,7 @@ repos:
       - id: blacken-docs
         language: python
         additional_dependencies:
-          - black==25.1.0
+          - black==25.12.0
         files: \.rst$
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
@@ -60,7 +60,7 @@ repos:
       - id: mypy
         language: python
         additional_dependencies:
-          - black==25.1.0
+          - black==25.12.0
           - pytest==9.0.2
 
   # TODO:
