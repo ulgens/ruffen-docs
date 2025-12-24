@@ -37,6 +37,7 @@ repos:
     rev: v6.2.5
     hooks:
       - id: rstcheck
+        language: python
         additional_dependencies:
           - tomli==2.0.1
 
@@ -44,6 +45,7 @@ repos:
     rev: 1.20.0
     hooks:
       - id: blacken-docs
+        language: python
         additional_dependencies:
           - black==25.1.0
         files: \.rst$
@@ -59,6 +61,7 @@ repos:
     rev: v1.19.1
     hooks:
       - id: mypy
+        language: python
         additional_dependencies:
           - black==25.1.0
           - pytest==7.1.2
