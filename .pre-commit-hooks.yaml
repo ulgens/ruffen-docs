@@ -1,6 +1,7 @@
--   id: blacken-docs
+---
+  - id: blacken-docs
     name: blacken-docs
     description: Run `black` on python code blocks in documentation files
     entry: blacken-docs
     language: python
-    files: '\.(rst|md|markdown|py|tex)$'
+    files: \.(rst|md|markdown|py|tex)$
