@@ -54,3 +54,13 @@ repos:
     additional_dependencies:
     - black==25.1.0
     - pytest==7.1.2
+
+  # TODO:
+  #   Consider using with yamllint
+  #   https://github.com/jumanjihouse/pre-commit-hook-yamlfmt?tab=readme-ov-file#combine-with-yamllint
+- repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
+  rev: 0.2.3
+  hooks:
+    - id: yamlfmt
+      # Matching config for `prek sample-config` output
+      args: [--mapping, '2', --sequence, '4', --offset, '2']
