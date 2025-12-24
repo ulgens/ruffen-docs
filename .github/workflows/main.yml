@@ -30,15 +30,12 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: ${{ matrix.python-version }}
-          allow-prereleases: true
-
-      - name: Install uv
+      - name: Install uv & Python ${{ matrix.python-version }}
         uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
         with:
           enable-cache: true
+          python-version: ${{ matrix.python-version }}
+          # TODO: Do we need `allow-prereleases: true`?
 
       - name: Run tox targets for ${{ matrix.python-version }}
         run: uvx --with tox-uv tox run -f py$(echo ${{ matrix.python-version }} | tr -d .)
@@ -59,14 +56,16 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-        with:
-          python-version: '3.14'
 
-      - name: Install uv
+      - name: Install uv & Python 3.14
         uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
+        with:
+          enable-cache: true
+          python-version: '3.14'
+          activate-environment: true
 
       - name: Install dependencies
-        run: uv pip install --system coverage[toml]
+        run: uv pip install coverage[toml]
 
       - name: Download data
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
