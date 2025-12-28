@@ -1122,7 +1122,6 @@ def test_integration_ignored_syntax_error(tmp_path, capsys):
     result = blacken_docs.main((str(f), "--skip-errors"))
 
     assert result == 1
-    out, _ = capsys.readouterr()
     assert f.read_text() == ("```python\nf()\n```\n\n```python\nf(\n```\n")
 
 
