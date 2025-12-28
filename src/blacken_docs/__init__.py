@@ -6,6 +6,7 @@ import re
 import textwrap
 from bisect import bisect
 from collections.abc import Generator, Sequence
+from pathlib import Path
 from re import Match
 
 import black
@@ -285,7 +286,7 @@ def format_file(
     rst_literal_blocks: bool,
     check_only: bool,
 ) -> int:
-    with open(filename, encoding="UTF-8") as f:
+    with Path(filename).open(encoding="UTF-8") as f:
         contents = f.read()
     new_contents, errors = format_str(
         contents,
@@ -303,7 +304,7 @@ def format_file(
         print(f"{filename}: Requires a rewrite.")
         return 1
     print(f"{filename}: Rewriting...")
-    with open(filename, "w", encoding="UTF-8") as f:
+    with Path(filename).open("w", encoding="UTF-8") as f:
         f.write(new_contents)
     return 1
 
