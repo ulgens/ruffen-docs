@@ -19,16 +19,6 @@ select = [
     # Pyflakes warnings
     "W",
 ]
-ignore = [
-    # flake8-bugbear opinionated rules
-    "B9",
-    # line-too-long
-    "E501",
-    # suppressible-exception
-    "SIM105",
-    # if-else-block-instead-of-if-exp
-    "SIM108",
-]
 extend-safe-fixes = [
     # non-pep585-annotation
     "UP006",
