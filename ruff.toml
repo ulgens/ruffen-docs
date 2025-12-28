@@ -1,3 +1,5 @@
+target-version = "py310"
+
 [lint]
 select = [
     # flake8-bugbear
