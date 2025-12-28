@@ -141,7 +141,7 @@ def format_str(
     def _collect_error(match: Match[str]) -> Generator[None]:
         try:
             yield
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             errors.append(CodeBlockError(match.start(), e))
 
     def _md_match(match: Match[str]) -> str:
