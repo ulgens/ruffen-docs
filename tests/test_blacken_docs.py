@@ -6,9 +6,9 @@ from black import Mode
 
 from blacken_docs import (
     __main__,  # noqa: F401
-    format_str,
     run,
 )
+from blacken_docs.formatters import format_str
 
 BLACK_MODE = Mode()
 
