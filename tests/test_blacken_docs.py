@@ -7,7 +7,7 @@ from black import Mode
 from blacken_docs import (
     __main__,  # noqa: F401
     format_str,
-    main,
+    run,
 )
 
 BLACK_MODE = Mode()
@@ -888,7 +888,7 @@ def test_integration_ok(tmp_path, capsys):
         "```python\nf(1, 2, 3)\n```\n",
     )
 
-    result = main((str(f),))
+    result = run((str(f),))
 
     assert result == 0
     assert not capsys.readouterr()[1]
@@ -901,7 +901,7 @@ def test_integration_modifies(tmp_path, capsys):
         "```python\nf(1,2,3)\n```\n",
     )
 
-    result = main((str(f),))
+    result = run((str(f),))
 
     assert result == 1
     out, _ = capsys.readouterr()
@@ -917,10 +917,10 @@ def test_integration_line_length(tmp_path):
         "```\n",
     )
 
-    result = main((str(f), "--line-length=80"))
+    result = run((str(f), "--line-length=80"))
     assert result == 0
 
-    result2 = main((str(f), "--line-length=50"))
+    result2 = run((str(f), "--line-length=50"))
     assert result2 == 1
     assert f.read_text() == (
         "```python\n"
@@ -943,7 +943,7 @@ def test_integration_check(tmp_path):
     )
     f.write_text(text)
 
-    result = main((str(f), "--check"))
+    result = run((str(f), "--check"))
 
     assert result == 1
     assert f.read_text() == text
@@ -961,7 +961,7 @@ def test_integration_preview(tmp_path):
         )
     )
 
-    result = main((str(f), "--preview"))
+    result = run((str(f), "--preview"))
 
     assert result == 1
     assert f.read_text() == dedent(
@@ -988,7 +988,7 @@ def test_integration_pyi(tmp_path):
         )
     )
 
-    result = main((str(f), "--pyi"))
+    result = run((str(f), "--pyi"))
 
     assert result == 1
     assert f.read_text() == dedent(
@@ -1014,10 +1014,10 @@ def test_integration_py36(tmp_path):
         "```\n",
     )
 
-    result = main((str(f),))
+    result = run((str(f),))
     assert result == 0
 
-    result2 = main((str(f), "--target-version=py36"))
+    result2 = run((str(f), "--target-version=py36"))
 
     assert result2 == 1
     assert f.read_text() == (
@@ -1045,10 +1045,10 @@ def test_integration_filename_last(tmp_path):
         "```\n",
     )
 
-    result = main((str(f),))
+    result = run((str(f),))
     assert result == 0
 
-    result2 = main(("--target-version", "py36", str(f)))
+    result2 = run(("--target-version", "py36", str(f)))
 
     assert result2 == 1
     assert f.read_text() == (
@@ -1076,10 +1076,10 @@ def test_integration_multiple_target_version(tmp_path):
         "```\n",
     )
 
-    result = main((str(f),))
+    result = run((str(f),))
     assert result == 0
 
-    result2 = main(
+    result2 = run(
         ("--target-version", "py35", "--target-version", "py36", str(f)),
     )
     assert result2 == 0
@@ -1091,7 +1091,7 @@ def test_integration_skip_string_normalization(tmp_path):
         "```python\nf('hi')\n```\n",
     )
 
-    result = main((str(f), "--skip-string-normalization"))
+    result = run((str(f), "--skip-string-normalization"))
 
     assert result == 0
     assert f.read_text() == ("```python\nf('hi')\n```\n")
@@ -1103,7 +1103,7 @@ def test_integration_syntax_error(tmp_path, capsys):
         "```python\nf(\n```\n",
     )
 
-    result = main((str(f),))
+    result = run((str(f),))
 
     assert result == 2
     out, _ = capsys.readouterr()
@@ -1117,7 +1117,7 @@ def test_integration_ignored_syntax_error(tmp_path, capsys):
         "```python\nf( )\n```\n\n```python\nf(\n```\n",
     )
 
-    result = main((str(f), "--skip-errors"))
+    result = run((str(f), "--skip-errors"))
 
     assert result == 1
     assert f.read_text() == ("```python\nf()\n```\n\n```python\nf(\n```\n")
