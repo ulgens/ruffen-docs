@@ -13,97 +13,24 @@ import black
 from black.const import DEFAULT_LINE_LENGTH
 from black.mode import TargetVersion
 
-PYGMENTS_PY_LANGS = frozenset(("python", "py", "sage", "python3", "py3", "numpy"))
-PYGMENTS_PY_LANGS_RE_FRAGMENT = f"({'|'.join(PYGMENTS_PY_LANGS)})"
-MD_RE = re.compile(
-    r"(?P<before>^(?P<indent> *)```[^\S\r\n]*"
-    + PYGMENTS_PY_LANGS_RE_FRAGMENT
-    + r"( .*?)?\n)"
-    r"(?P<code>.*?)"
-    r"(?P<after>^(?P=indent)```[^\S\r\n]*$)",
-    re.DOTALL | re.MULTILINE,
+from .constants import PYGMENTS_PY_LANGS
+from .errors import CodeBlockError
+from .regex_patterns import (
+    INDENT_RE,
+    LATEX_PYCON_RE,
+    LATEX_RE,
+    MD_PYCON_RE,
+    MD_RE,
+    ON_OFF_COMMENT_RE,
+    PYCON_CONTINUATION_PREFIX,
+    PYCON_CONTINUATION_RE,
+    PYCON_PREFIX,
+    PYTHONTEX_RE,
+    RST_LITERAL_BLOCKS_RE,
+    RST_PYCON_RE,
+    RST_RE,
+    TRAILING_NL_RE,
 )
-MD_PYCON_RE = re.compile(
-    r"(?P<before>^(?P<indent> *)```[^\S\r\n]*pycon( .*?)?\n)"
-    r"(?P<code>.*?)"
-    r"(?P<after>^(?P=indent)```[^\S\r\n]*$)",
-    re.DOTALL | re.MULTILINE,
-)
-BLOCK_TYPES = "(code|code-block|sourcecode|ipython)"
-DOCTEST_TYPES = "(testsetup|testcleanup|testcode)"
-RST_RE = re.compile(
-    rf"(?P<before>"
-    rf"^(?P<indent> *)\.\. ("
-    rf"jupyter-execute::|"
-    rf"{BLOCK_TYPES}:: (?P<lang>\w+)|"
-    rf"{DOCTEST_TYPES}::.*"
-    rf")\n"
-    rf"((?P=indent) +:.*\n)*"
-    rf"( *\n)*"
-    rf")"
-    rf"(?P<code>(^((?P=indent) +.*)?\n)+)",
-    re.MULTILINE,
-)
-RST_LITERAL_BLOCKS_RE = re.compile(
-    r"(?P<before>"
-    r"^(?! *\.\. )(?P<indent> *).*::\n"
-    r"((?P=indent) +:.*\n)*"
-    r"\n*"
-    r")"
-    r"(?P<code>(^((?P=indent) +.*)?\n)+)",
-    re.MULTILINE,
-)
-RST_PYCON_RE = re.compile(
-    r"(?P<before>"
-    r"(?P<indent> *)\.\. ((code|code-block):: pycon|doctest::.*)\n"
-    r"((?P=indent) +:.*\n)*"
-    r"\n*"
-    r")"
-    r"(?P<code>(^((?P=indent) +.*)?(\n|$))+)",
-    re.MULTILINE,
-)
-PYCON_PREFIX = ">>> "
-PYCON_CONTINUATION_PREFIX = "..."
-PYCON_CONTINUATION_RE = re.compile(
-    rf"^{re.escape(PYCON_CONTINUATION_PREFIX)}( |$)",
-)
-LATEX_RE = re.compile(
-    r"(?P<before>^(?P<indent> *)\\begin{minted}(\[.*?\])?{python}\n)"
-    r"(?P<code>.*?)"
-    r"(?P<after>^(?P=indent)\\end{minted}\s*$)",
-    re.DOTALL | re.MULTILINE,
-)
-LATEX_PYCON_RE = re.compile(
-    r"(?P<before>^(?P<indent> *)\\begin{minted}(\[.*?\])?{pycon}\n)"
-    r"(?P<code>.*?)"
-    r"(?P<after>^(?P=indent)\\end{minted}\s*$)",
-    re.DOTALL | re.MULTILINE,
-)
-PYTHONTEX_LANG = r"(?P<lang>pyblock|pycode|pyconsole|pyverbatim)"
-PYTHONTEX_RE = re.compile(
-    rf"(?P<before>^(?P<indent> *)\\begin{{{PYTHONTEX_LANG}}}\n)"
-    rf"(?P<code>.*?)"
-    rf"(?P<after>^(?P=indent)\\end{{(?P=lang)}}\s*$)",
-    re.DOTALL | re.MULTILINE,
-)
-INDENT_RE = re.compile("^ +(?=[^ ])", re.MULTILINE)
-TRAILING_NL_RE = re.compile(r"\n+\Z", re.MULTILINE)
-ON_OFF = r"blacken-docs:(on|off)"
-ON_OFF_COMMENT_RE = re.compile(
-    # Markdown
-    rf"(?:^\s*<!-- {ON_OFF} -->$)|"
-    # rST
-    rf"(?:^\s*\.\. +{ON_OFF}$)|"
-    # LaTeX
-    rf"(?:^\s*% {ON_OFF}$)",
-    re.MULTILINE,
-)
-
-
-class CodeBlockError:
-    def __init__(self, offset: int, exc: Exception) -> None:
-        self.offset = offset
-        self.exc = exc
 
 
 def format_str(
