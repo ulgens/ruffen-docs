@@ -35,7 +35,7 @@ from .regex_patterns import (
 
 def format_str(
     src: str,
-    black_mode: black.FileMode,
+    black_mode: black.Mode,
     *,
     rst_literal_blocks: bool = False,
 ) -> tuple[str, Sequence[CodeBlockError]]:
@@ -248,7 +248,7 @@ def format_str(
 
 def format_file(
     filename: str,
-    black_mode: black.FileMode,
+    black_mode: black.Mode,
     skip_errors: bool,
     rst_literal_blocks: bool,
     check_only: bool,
