@@ -1,5 +1,8 @@
 target-version = "py310"
 
+[format]
+preview = true
+
 [lint]
 select = [
     # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
