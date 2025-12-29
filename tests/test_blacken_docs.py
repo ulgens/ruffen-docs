@@ -3,12 +3,11 @@ from __future__ import annotations
 from textwrap import dedent
 
 import black
-from black.const import DEFAULT_LINE_LENGTH
 
 import blacken_docs
 from blacken_docs import __main__  # noqa: F401
 
-BLACK_MODE = black.Mode(line_length=DEFAULT_LINE_LENGTH)
+BLACK_MODE = black.Mode()
 
 
 def test_format_src_trivial():
