@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from textwrap import dedent
 
-import black
+from black import Mode
 
 from blacken_docs import (
     __main__,  # noqa: F401
@@ -10,7 +10,7 @@ from blacken_docs import (
     main,
 )
 
-BLACK_MODE = black.Mode()
+BLACK_MODE = Mode()
 
 
 def test_format_src_trivial():
