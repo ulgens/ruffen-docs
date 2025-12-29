@@ -97,16 +97,22 @@ class BlackFormatter:
     def _rst_literal_blocks_match(self, match: Match[str]) -> str:
         if self._within_off_range(match.span()):
             return match[0]
+
         if not match["code"].strip():
             return match[0]
+
         min_indent = min(INDENT_RE.findall(match["code"]))
         trailing_ws_match = TRAILING_NL_RE.search(match["code"])
         assert trailing_ws_match
+
         trailing_ws = trailing_ws_match.group()
         code = textwrap.dedent(match["code"])
+
         with self._collect_error(match):
             code = black.format_str(code, mode=self.mode)
+
         code = textwrap.indent(code, min_indent)
+
         return f"{match['before']}{code.rstrip()}{trailing_ws}"
 
     def _pycon_match(self, match: Match[str]) -> str:
