@@ -4,14 +4,17 @@ from textwrap import dedent
 
 import black
 
-import blacken_docs
-from blacken_docs import __main__  # noqa: F401
+from blacken_docs import (
+    __main__,  # noqa: F401
+    format_str,
+    main,
+)
 
 BLACK_MODE = black.Mode()
 
 
 def test_format_src_trivial():
-    after, _ = blacken_docs.format_str("", BLACK_MODE)
+    after, _ = format_str("", BLACK_MODE)
     assert after == ""
 
 
@@ -23,7 +26,7 @@ def test_format_src_markdown_simple():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         ```python
@@ -41,7 +44,7 @@ def test_format_src_markdown_leading_whitespace():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         ```   python
@@ -60,7 +63,7 @@ def test_format_src_markdown_python_after_newline():
         ```
         """
     )
-    after, errors = blacken_docs.format_str(before, BLACK_MODE)
+    after, errors = format_str(before, BLACK_MODE)
     assert errors == []
     assert after == before
 
@@ -73,7 +76,7 @@ def test_format_src_markdown_short_name():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         ```   py
@@ -91,7 +94,7 @@ def test_format_src_markdown_options():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         ```python title='example.py'
@@ -108,7 +111,7 @@ def test_format_src_markdown_trailing_whitespace():
         f(1,2,3)
         ```    \n"""
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         ```python
@@ -127,7 +130,7 @@ def test_format_src_indented_markdown():
         - also this
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         - do this pls:
@@ -152,7 +155,7 @@ def test_format_src_markdown_pycon():
         world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -176,7 +179,7 @@ def test_format_src_markdown_pycon_after_newline():
         ```
         """
     )
-    after, errors = blacken_docs.format_str(before, BLACK_MODE)
+    after, errors = format_str(before, BLACK_MODE)
     assert errors == []
     assert after == before
 
@@ -194,7 +197,7 @@ def test_format_src_markdown_pycon_options():
         world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -223,7 +226,7 @@ def test_format_src_markdown_pycon_twice():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         ```pycon
@@ -249,7 +252,7 @@ def test_format_src_markdown_comments_disable():
         <!-- blacken-docs:on -->
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -266,7 +269,7 @@ def test_format_src_markdown_comments_disabled_enabled():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         <!-- blacken-docs:off -->
@@ -291,7 +294,7 @@ def test_format_src_markdown_comments_before():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         <!-- blacken-docs:off -->
@@ -313,7 +316,7 @@ def test_format_src_markdown_comments_after():
         <!-- blacken-docs:on -->
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         ```python
@@ -335,7 +338,7 @@ def test_format_src_markdown_comments_only_on():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         <!-- blacken-docs:on -->
@@ -358,7 +361,7 @@ def test_format_src_markdown_comments_only_off():
         """
     )
     # fmt: on
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -376,7 +379,7 @@ def test_format_src_markdown_comments_multiple():
         ```
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -392,7 +395,7 @@ def test_on_off_comments_in_code_blocks():
         ````
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -406,7 +409,7 @@ def test_format_src_markdown_comments_disable_pycon():
         <!-- blacken-docs:on -->
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -420,7 +423,7 @@ def test_format_src_latex_minted():
         world!
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -445,7 +448,7 @@ def test_format_src_latex_minted_opt():
         done
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         maths!
@@ -473,7 +476,7 @@ def test_format_src_latex_minted_indented():
         world!
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -497,7 +500,7 @@ def test_format_src_latex_minted_pycon():
         Following text.
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         Preceding text
@@ -523,7 +526,7 @@ def test_format_src_latex_minted_pycon_indented():
         Following text.
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         Preceding text
@@ -546,7 +549,7 @@ def test_format_src_latex_minted_comments_off():
         % blacken-docs:on
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -560,7 +563,7 @@ def test_format_src_latex_minted_comments_off_pycon():
         % blacken-docs:on
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -575,7 +578,7 @@ def test_format_src_pythontex():
         world!
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -598,7 +601,7 @@ def test_format_src_pythontex_comments_off():
         % blacken-docs:on
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -614,7 +617,7 @@ def test_format_src_rst():
         world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -630,7 +633,7 @@ def test_format_src_rst():
 
 def test_format_src_rst_empty():
     before = "some text\n\n.. code-block:: python\n\n\nsome other text\n"
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -644,7 +647,7 @@ def test_format_src_rst_literal_blocks():
         world
         """
     )
-    after, _ = blacken_docs.format_str(
+    after, _ = format_str(
         before,
         BLACK_MODE,
         rst_literal_blocks=True,
@@ -667,7 +670,7 @@ def test_format_src_rst_literal_block_empty():
         world
         """
     )
-    after, _ = blacken_docs.format_str(
+    after, _ = format_str(
         before,
         BLACK_MODE,
         rst_literal_blocks=True,
@@ -685,7 +688,7 @@ def test_format_src_rst_literal_blocks_nested():
             don't hello too much
         """,
     )
-    after, errors = blacken_docs.format_str(
+    after, errors = format_str(
         before,
         BLACK_MODE,
         rst_literal_blocks=True,
@@ -704,7 +707,7 @@ def test_format_src_rst_literal_blocks_empty():
             There was no example.
         """,
     )
-    after, errors = blacken_docs.format_str(
+    after, errors = format_str(
         before,
         BLACK_MODE,
         rst_literal_blocks=True,
@@ -724,7 +727,7 @@ def test_format_src_rst_literal_blocks_comments():
         .. blacken-docs:on
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE, rst_literal_blocks=True)
+    after, _ = format_str(before, BLACK_MODE, rst_literal_blocks=True)
     assert after == before
 
 
@@ -751,7 +754,7 @@ def test_format_src_rst_sphinx_doctest():
 
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. testsetup:: group1
@@ -792,7 +795,7 @@ def test_format_src_rst_indented():
             world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. versionadded:: 3.1
@@ -815,7 +818,7 @@ def test_format_src_rst_code_block_indent():
         "   ",
         "   f(1,2,3)\n",
     ])
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == "\n".join([
         ".. code-block:: python",
         "   ",
@@ -834,7 +837,7 @@ def test_format_src_rst_with_highlight_directives():
                 bar(1,2,3)
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: python
@@ -860,7 +863,7 @@ def test_format_src_rst_python_inside_non_python_code_block():
             +    "Hello World"
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -875,7 +878,7 @@ def test_format_src_rst_python_comments():
         .. blacken-docs:on
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -885,7 +888,7 @@ def test_integration_ok(tmp_path, capsys):
         "```python\nf(1, 2, 3)\n```\n",
     )
 
-    result = blacken_docs.main((str(f),))
+    result = main((str(f),))
 
     assert result == 0
     assert not capsys.readouterr()[1]
@@ -898,7 +901,7 @@ def test_integration_modifies(tmp_path, capsys):
         "```python\nf(1,2,3)\n```\n",
     )
 
-    result = blacken_docs.main((str(f),))
+    result = main((str(f),))
 
     assert result == 1
     out, _ = capsys.readouterr()
@@ -914,10 +917,10 @@ def test_integration_line_length(tmp_path):
         "```\n",
     )
 
-    result = blacken_docs.main((str(f), "--line-length=80"))
+    result = main((str(f), "--line-length=80"))
     assert result == 0
 
-    result2 = blacken_docs.main((str(f), "--line-length=50"))
+    result2 = main((str(f), "--line-length=50"))
     assert result2 == 1
     assert f.read_text() == (
         "```python\n"
@@ -940,7 +943,7 @@ def test_integration_check(tmp_path):
     )
     f.write_text(text)
 
-    result = blacken_docs.main((str(f), "--check"))
+    result = main((str(f), "--check"))
 
     assert result == 1
     assert f.read_text() == text
@@ -958,7 +961,7 @@ def test_integration_preview(tmp_path):
         )
     )
 
-    result = blacken_docs.main((str(f), "--preview"))
+    result = main((str(f), "--preview"))
 
     assert result == 1
     assert f.read_text() == dedent(
@@ -985,7 +988,7 @@ def test_integration_pyi(tmp_path):
         )
     )
 
-    result = blacken_docs.main((str(f), "--pyi"))
+    result = main((str(f), "--pyi"))
 
     assert result == 1
     assert f.read_text() == dedent(
@@ -1011,10 +1014,10 @@ def test_integration_py36(tmp_path):
         "```\n",
     )
 
-    result = blacken_docs.main((str(f),))
+    result = main((str(f),))
     assert result == 0
 
-    result2 = blacken_docs.main((str(f), "--target-version=py36"))
+    result2 = main((str(f), "--target-version=py36"))
 
     assert result2 == 1
     assert f.read_text() == (
@@ -1042,10 +1045,10 @@ def test_integration_filename_last(tmp_path):
         "```\n",
     )
 
-    result = blacken_docs.main((str(f),))
+    result = main((str(f),))
     assert result == 0
 
-    result2 = blacken_docs.main(("--target-version", "py36", str(f)))
+    result2 = main(("--target-version", "py36", str(f)))
 
     assert result2 == 1
     assert f.read_text() == (
@@ -1073,10 +1076,10 @@ def test_integration_multiple_target_version(tmp_path):
         "```\n",
     )
 
-    result = blacken_docs.main((str(f),))
+    result = main((str(f),))
     assert result == 0
 
-    result2 = blacken_docs.main(
+    result2 = main(
         ("--target-version", "py35", "--target-version", "py36", str(f)),
     )
     assert result2 == 0
@@ -1088,7 +1091,7 @@ def test_integration_skip_string_normalization(tmp_path):
         "```python\nf('hi')\n```\n",
     )
 
-    result = blacken_docs.main((str(f), "--skip-string-normalization"))
+    result = main((str(f), "--skip-string-normalization"))
 
     assert result == 0
     assert f.read_text() == ("```python\nf('hi')\n```\n")
@@ -1100,7 +1103,7 @@ def test_integration_syntax_error(tmp_path, capsys):
         "```python\nf(\n```\n",
     )
 
-    result = blacken_docs.main((str(f),))
+    result = main((str(f),))
 
     assert result == 2
     out, _ = capsys.readouterr()
@@ -1114,7 +1117,7 @@ def test_integration_ignored_syntax_error(tmp_path, capsys):
         "```python\nf( )\n```\n\n```python\nf(\n```\n",
     )
 
-    result = blacken_docs.main((str(f), "--skip-errors"))
+    result = main((str(f), "--skip-errors"))
 
     assert result == 1
     assert f.read_text() == ("```python\nf()\n```\n\n```python\nf(\n```\n")
@@ -1132,7 +1135,7 @@ def test_format_src_rst_jupyter_sphinx():
         world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -1159,7 +1162,7 @@ def test_format_src_rst_jupyter_sphinx_with_directive():
         world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -1188,7 +1191,7 @@ def test_format_src_python_docstring_markdown():
             pass
         '''
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         '''\
         def f():
@@ -1218,7 +1221,7 @@ def test_format_src_python_docstring_rst():
             pass
         '''
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         '''\
         def f():
@@ -1247,7 +1250,7 @@ def test_format_src_rst_pycon():
         world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         hello
@@ -1274,7 +1277,7 @@ def test_format_src_rst_pycon_with_continuation():
 
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1291,7 +1294,7 @@ def test_format_src_rst_pycon_with_continuation():
 
 def test_format_src_rst_pycon_adds_continuation():
     before = '.. code-block:: pycon\n\n    >>> d = {"a": 1,"b": 2,"c": 3,}\n\n'
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1320,7 +1323,7 @@ def test_format_src_rst_pycon_preserves_trailing_whitespace():
         world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -1340,7 +1343,7 @@ def test_format_src_rst_pycon_indented():
             world
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. versionadded:: 3.1
@@ -1368,7 +1371,7 @@ def test_format_src_rst_pycon_code_block_is_final_line1():
             ...
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1382,7 +1385,7 @@ def test_format_src_rst_pycon_code_block_is_final_line1():
 
 def test_format_src_rst_pycon_code_block_is_final_line2():
     before = ".. code-block:: pycon\n\n    >>> if True:\n    ...   pass\n"
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1404,7 +1407,7 @@ def test_format_src_rst_pycon_nested_def1():
             ...
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1426,7 +1429,7 @@ def test_format_src_rst_pycon_nested_def2():
             ...     def f(): pass
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1450,7 +1453,7 @@ def test_format_src_rst_pycon_empty_line():
             ... ]
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1473,7 +1476,7 @@ def test_format_src_rst_pycon_preserves_output_indentation():
             ZeroDivisionError: division by zero
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
@@ -1488,19 +1491,19 @@ def test_format_src_rst_pycon_elided_traceback():
             ZeroDivisionError: division by zero
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
 def test_format_src_rst_pycon_no_prompt():
     before = ".. code-block:: pycon\n\n    pass\n"
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
 def test_format_src_rst_pycon_no_trailing_newline():
     before = ".. code-block:: pycon\n\n    >>> pass"
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == (".. code-block:: pycon\n\n    >>> pass\n")
 
 
@@ -1513,7 +1516,7 @@ def test_format_src_rst_pycon_comment_before_promopt():
             >>> pass
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1535,11 +1538,11 @@ def test_format_src_rst_pycon_comments():
         .. blacken-docs:on
         """
     )
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
 
 
 def test_format_src_rst_pycon_empty():
     before = "some text\n\n.. code-block:: pycon\n\n\nsome other text\n"
-    after, _ = blacken_docs.format_str(before, BLACK_MODE)
+    after, _ = format_str(before, BLACK_MODE)
     assert after == before
