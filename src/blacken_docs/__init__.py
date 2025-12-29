@@ -284,7 +284,7 @@ def format_file(
     return 1
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def run(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-l",
