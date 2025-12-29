@@ -7,7 +7,7 @@ import black
 from black.const import DEFAULT_LINE_LENGTH
 from black.mode import TargetVersion
 
-from .formatters import format_file
+from .formatters import BlackFormatter
 
 
 def run(argv: Sequence[str] | None = None) -> int:
@@ -69,9 +69,9 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     retv = 0
     for filename in args.filenames:
-        retv |= format_file(
+        formatter = BlackFormatter(mode=black_mode)
+        retv |= formatter.format_file(
             filename,
-            black_mode,
             skip_errors=args.skip_errors,
             rst_literal_blocks=args.rst_literal_blocks,
             check_only=args.check,

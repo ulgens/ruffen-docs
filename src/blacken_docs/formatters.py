@@ -9,6 +9,7 @@ from pathlib import Path
 from re import Match
 
 import black
+from black import Mode
 
 from .constants import PYGMENTS_PY_LANGS
 from .errors import CodeBlockError
@@ -30,35 +31,17 @@ from .regex_patterns import (
 )
 
 
-def format_str(
-    src: str,
-    black_mode: black.Mode,
-    *,
-    rst_literal_blocks: bool = False,
-) -> tuple[str, Sequence[CodeBlockError]]:
-    errors: list[CodeBlockError] = []
+class BlackFormatter:
+    def __init__(self, mode: Mode) -> None:
+        self.mode: Mode = mode
+        self.errors: list[CodeBlockError] = []
+        self.off_ranges: list[tuple[int, int]] = []
 
-    off_ranges = []
-    off_start = None
-
-    for comment in re.finditer(ON_OFF_COMMENT_RE, src):
-        # Check for the "off" value across the multiple (on|off) groups.
-        if "off" in comment.groups():
-            if off_start is None:
-                off_start = comment.start()
-        else:
-            if off_start is not None:
-                off_ranges.append((off_start, comment.end()))
-                off_start = None
-
-    if off_start is not None:
-        off_ranges.append((off_start, len(src)))
-
-    def _within_off_range(code_range: tuple[int, int]) -> bool:
-        index = bisect(off_ranges, code_range)
+    def _within_off_range(self, code_range: tuple[int, int]) -> bool:
+        index = bisect(self.off_ranges, code_range)
 
         try:
-            off_start, off_end = off_ranges[index - 1]
+            off_start, off_end = self.off_ranges[index - 1]
         except IndexError:
             return False
 
@@ -67,27 +50,27 @@ def format_str(
         return code_start >= off_start and code_end <= off_end
 
     @contextlib.contextmanager
-    def _collect_error(match: Match[str]) -> Generator[None]:
+    def _collect_error(self, match: Match[str]) -> Generator[None]:
         try:
             yield
         except Exception as e:  # noqa: BLE001
-            errors.append(CodeBlockError(match.start(), e))
+            self.errors.append(CodeBlockError(match.start(), e))
 
-    def _md_match(match: Match[str]) -> str:
-        if _within_off_range(match.span()):
+    def _md_match(self, match: Match[str]) -> str:
+        if self._within_off_range(match.span()):
             return match[0]
 
         code = textwrap.dedent(match["code"])
 
-        with _collect_error(match):
-            code = black.format_str(code, mode=black_mode)
+        with self._collect_error(match):
+            code = black.format_str(code, mode=self.mode)
 
         code = textwrap.indent(code, match["indent"])
 
         return f"{match['before']}{code}{match['after']}"
 
-    def _rst_match(match: Match[str]) -> str:
-        if _within_off_range(match.span()):
+    def _rst_match(self, match: Match[str]) -> str:
+        if self._within_off_range(match.span()):
             return match[0]
         lang = match["lang"]
 
@@ -104,15 +87,15 @@ def format_str(
         trailing_ws = trailing_ws_match.group()
         code = textwrap.dedent(match["code"])
 
-        with _collect_error(match):
-            code = black.format_str(code, mode=black_mode)
+        with self._collect_error(match):
+            code = black.format_str(code, mode=self.mode)
 
         code = textwrap.indent(code, min_indent)
 
         return f"{match['before']}{code.rstrip()}{trailing_ws}"
 
-    def _rst_literal_blocks_match(match: Match[str]) -> str:
-        if _within_off_range(match.span()):
+    def _rst_literal_blocks_match(self, match: Match[str]) -> str:
+        if self._within_off_range(match.span()):
             return match[0]
         if not match["code"].strip():
             return match[0]
@@ -121,12 +104,12 @@ def format_str(
         assert trailing_ws_match
         trailing_ws = trailing_ws_match.group()
         code = textwrap.dedent(match["code"])
-        with _collect_error(match):
-            code = black.format_str(code, mode=black_mode)
+        with self._collect_error(match):
+            code = black.format_str(code, mode=self.mode)
         code = textwrap.indent(code, min_indent)
         return f"{match['before']}{code.rstrip()}{trailing_ws}"
 
-    def _pycon_match(match: Match[str]) -> str:
+    def _pycon_match(self, match: Match[str]) -> str:
         code = ""
         fragment: str | None = None
 
@@ -135,8 +118,8 @@ def format_str(
             nonlocal fragment
 
             if fragment is not None:
-                with _collect_error(match):
-                    fragment = black.format_str(fragment, mode=black_mode)
+                with self._collect_error(match):
+                    fragment = black.format_str(fragment, mode=self.mode)
 
                 fragment_lines = fragment.splitlines()
                 code += f"{PYCON_PREFIX}{fragment_lines[0]}\n"
@@ -182,20 +165,20 @@ def format_str(
 
         return code
 
-    def _md_pycon_match(match: Match[str]) -> str:
-        if _within_off_range(match.span()):
+    def _md_pycon_match(self, match: Match[str]) -> str:
+        if self._within_off_range(match.span()):
             return match[0]
 
-        code = _pycon_match(match)
+        code = self._pycon_match(match)
         code = textwrap.indent(code, match["indent"])
 
         return f"{match['before']}{code}{match['after']}"
 
-    def _rst_pycon_match(match: Match[str]) -> str:
-        if _within_off_range(match.span()):
+    def _rst_pycon_match(self, match: Match[str]) -> str:
+        if self._within_off_range(match.span()):
             return match[0]
 
-        code = _pycon_match(match)
+        code = self._pycon_match(match)
 
         if not code.strip():
             return match[0]
@@ -205,77 +188,98 @@ def format_str(
 
         return f"{match['before']}{code}"
 
-    def _latex_match(match: Match[str]) -> str:
-        if _within_off_range(match.span()):
+    def _latex_match(self, match: Match[str]) -> str:
+        if self._within_off_range(match.span()):
             return match[0]
 
         code = textwrap.dedent(match["code"])
 
-        with _collect_error(match):
-            code = black.format_str(code, mode=black_mode)
+        with self._collect_error(match):
+            code = black.format_str(code, mode=self.mode)
 
         code = textwrap.indent(code, match["indent"])
 
         return f"{match['before']}{code}{match['after']}"
 
-    def _latex_pycon_match(match: Match[str]) -> str:
-        if _within_off_range(match.span()):
+    def _latex_pycon_match(self, match: Match[str]) -> str:
+        if self._within_off_range(match.span()):
             return match[0]
 
-        code = _pycon_match(match)
+        code = self._pycon_match(match)
         code = textwrap.indent(code, match["indent"])
 
         return f"{match['before']}{code}{match['after']}"
 
-    src = MD_RE.sub(_md_match, src)
-    src = MD_PYCON_RE.sub(_md_pycon_match, src)
-    src = RST_RE.sub(_rst_match, src)
-    src = RST_PYCON_RE.sub(_rst_pycon_match, src)
-    if rst_literal_blocks:
-        src = RST_LITERAL_BLOCKS_RE.sub(
-            _rst_literal_blocks_match,
-            src,
+    def format_str(
+        self,
+        src: str,
+        *,
+        rst_literal_blocks: bool = False,
+    ) -> tuple[str, Sequence[CodeBlockError]]:
+        off_start = None
+
+        for comment in re.finditer(ON_OFF_COMMENT_RE, src):
+            # Check for the "off" value across the multiple (on|off) groups.
+            if "off" in comment.groups():
+                if off_start is None:
+                    off_start = comment.start()
+            else:
+                if off_start is not None:
+                    self.off_ranges.append((off_start, comment.end()))
+                    print(self.off_ranges)
+                    off_start = None
+
+        if off_start is not None:
+            self.off_ranges.append((off_start, len(src)))
+            print(self.off_ranges)
+
+        src = MD_RE.sub(self._md_match, src)
+        src = MD_PYCON_RE.sub(self._md_pycon_match, src)
+        src = RST_RE.sub(self._rst_match, src)
+        src = RST_PYCON_RE.sub(self._rst_pycon_match, src)
+        if rst_literal_blocks:
+            src = RST_LITERAL_BLOCKS_RE.sub(
+                self._rst_literal_blocks_match,
+                src,
+            )
+        src = LATEX_RE.sub(self._latex_match, src)
+        src = LATEX_PYCON_RE.sub(self._latex_pycon_match, src)
+        src = PYTHONTEX_RE.sub(self._latex_match, src)
+
+        return src, self.errors
+
+    def format_file(
+        self,
+        filename: str,
+        skip_errors: bool,
+        rst_literal_blocks: bool,
+        check_only: bool,
+    ) -> int:
+        with Path(filename).open(encoding="UTF-8") as f:
+            contents = f.read()
+
+        new_contents, errors = self.format_str(
+            contents,
+            rst_literal_blocks=rst_literal_blocks,
         )
-    src = LATEX_RE.sub(_latex_match, src)
-    src = LATEX_PYCON_RE.sub(_latex_pycon_match, src)
-    src = PYTHONTEX_RE.sub(_latex_match, src)
 
-    return src, errors
+        for error in errors:
+            lineno = contents[: error.offset].count("\n") + 1
+            print(f"{filename}:{lineno}: code block parse error {error.exc}")
 
+        if errors and not skip_errors:
+            return 2
 
-def format_file(
-    filename: str,
-    black_mode: black.Mode,
-    skip_errors: bool,
-    rst_literal_blocks: bool,
-    check_only: bool,
-) -> int:
-    with Path(filename).open(encoding="UTF-8") as f:
-        contents = f.read()
+        if contents == new_contents:
+            return 0
 
-    new_contents, errors = format_str(
-        contents,
-        black_mode,
-        rst_literal_blocks=rst_literal_blocks,
-    )
+        if check_only:
+            print(f"{filename}: Requires a rewrite.")
+            return 1
 
-    for error in errors:
-        lineno = contents[: error.offset].count("\n") + 1
-        print(f"{filename}:{lineno}: code block parse error {error.exc}")
+        print(f"{filename}: Rewriting...")
 
-    if errors and not skip_errors:
-        return 2
+        with Path(filename).open("w", encoding="UTF-8") as f:
+            f.write(new_contents)
 
-    if contents == new_contents:
-        return 0
-
-    if check_only:
-        print(f"{filename}: Requires a rewrite.")
         return 1
-
-    print(f"{filename}: Rewriting...")
-
-    with Path(filename).open("w", encoding="UTF-8") as f:
-        f.write(new_contents)
-
-    return 1
