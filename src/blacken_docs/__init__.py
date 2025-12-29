@@ -244,7 +244,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         type=int,
         default=DEFAULT_LINE_LENGTH,
     )
-    parser.add_argument("--preview", action="store_true",)
+    parser.add_argument(
+        "--preview",
+        action="store_true",
+    )
     parser.add_argument(
         "-S",
         "--skip-string-normalization",
@@ -259,14 +262,27 @@ def main(argv: Sequence[str] | None = None) -> int:
         help=f"choices: {[v.name.lower() for v in TargetVersion]}",
         dest="target_versions",
     )
-    parser.add_argument("--check", action="store_true",)
-    parser.add_argument("-E", "--skip-errors", action="store_true",)
+    parser.add_argument(
+        "--check",
+        action="store_true",
+    )
+    parser.add_argument(
+        "-E",
+        "--skip-errors",
+        action="store_true",
+    )
     parser.add_argument(
         "--rst-literal-blocks",
         action="store_true",
     )
-    parser.add_argument("--pyi", action="store_true",)
-    parser.add_argument("filenames", nargs="*",)
+    parser.add_argument(
+        "--pyi",
+        action="store_true",
+    )
+    parser.add_argument(
+        "filenames",
+        nargs="*",
+    )
     args = parser.parse_args(argv)
 
     black_mode = black.Mode(
