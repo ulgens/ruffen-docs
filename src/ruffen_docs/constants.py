@@ -7,7 +7,7 @@ __all__ = (
     "PYTHONTEX_LANG",
 )
 
-ON_OFF = r"blacken-docs:(on|off)"
+ON_OFF = r"ruffen-docs:(on|off)"
 PYCON_CONTINUATION_PREFIX = "..."
 PYGMENTS_PY_LANGS = frozenset((
     "python",

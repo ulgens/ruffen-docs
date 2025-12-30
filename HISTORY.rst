@@ -1,1 +1,1 @@
-See https://github.com/adamchainz/blacken-docs/blob/main/CHANGELOG.rst
+See https://github.com/ulgens/ruffen-docs/blob/main/CHANGELOG.rst

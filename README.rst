@@ -1,19 +1,19 @@
 ============
-blacken-docs
+ruffen-docs
 ============
 
-.. image:: https://img.shields.io/pypi/pyversions/blacken-docs
+.. image:: https://img.shields.io/pypi/pyversions/ruffen-docs
    :alt: PyPI - Python Version
 
-.. image:: https://img.shields.io/pypi/v/blacken-docs.svg
-   :target: https://pypi.org/project/blacken-docs/
+.. image:: https://img.shields.io/pypi/v/ruffen-docs.svg
+   :target: https://pypi.org/project/ruffen-docs/
 
 .. image:: https://img.shields.io/github/checks-status/adamchainz/blacken-docs/main
    :alt: GitHub main branch status
 
 .. TODO: Use a dynamic badge
 .. image:: https://img.shields.io/badge/Coverage-100%25-success
-  :target: https://github.com/adamchainz/blacken-docs/actions?workflow=CI
+  :target: https://github.com/ulgens/ruffen-docs/actions?workflow=CI
 
 
 .. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
@@ -24,7 +24,7 @@ blacken-docs
    :target: https://github.com/j178/prek
    :alt: prek enabled
 
-Run `Black <https://pypi.org/project/black/>`__ on Python code blocks in documentation files.
+Run `ruff <https://pypi.org/project/ruff/>`__ on Python code blocks in documentation files.
 
 Installation
 ============
@@ -33,52 +33,52 @@ Use **pip**:
 
 .. code-block:: sh
 
-    python -m pip install blacken-docs
+    python -m pip install ruffen-docs
 
 Python 3.10 to 3.14 supported.
 
-Black 22.1.0+ supported.
+ruff 0.14.1+ supported.
 
 pre-commit hook
 ---------------
 
-You can also install blacken-docs as a `pre-commit <https://pre-commit.com/>`__ hook.
+You can also install ruffen-docs as a `pre-commit <https://pre-commit.com/>`__ hook.
 Add the following to the ``repos`` section of your ``.pre-commit-config.yaml`` file (`docs <https://pre-commit.com/#plugins>`__):
 
 .. code-block:: yaml
 
-    -   repo: https://github.com/adamchainz/blacken-docs
+    -   repo: https://github.com/ulgens/ruffen-docs
         rev: ""  # replace with latest tag on GitHub
         hooks:
-        -   id: blacken-docs
+        -   id: ruffen-docs
             additional_dependencies:
-            - black==22.12.0
+            - ruff==0.14.1
 
 Then, reformat your entire project:
 
 .. code-block:: sh
 
-    pre-commit run blacken-docs --all-files
+    pre-commit run ruffen-docs --all-files
 
-Since Black is a moving target, it’s best to pin it in ``additional_dependencies``, and upgrade as appropriate.
-If you have Black installed as another hook, you can automate upgrading this pinned hook using `sync-pre-commit-deps <https://github.com/pre-commit/sync-pre-commit-deps>`__.
+Since ruff is a moving target, it’s best to pin it in ``additional_dependencies``, and upgrade as appropriate.
+If you have ruff installed as another hook, you can automate upgrading this pinned hook using `sync-pre-commit-deps <https://github.com/pre-commit/sync-pre-commit-deps>`__.
 
 Usage
 =====
 
-blacken-docs is a command line tool that rewrites documentation files in place.
+ruffen-docs is a command line tool that rewrites documentation files in place.
 It supports Markdown, reStructuredText, and LaTex files.
 Additionally, you can run it on Python files to reformat Markdown and reStructuredText within docstrings.
 
-Run ``blacken-docs`` with the filenames to rewrite:
+Run ``ruffen-docs`` with the filenames to rewrite:
 
 .. code-block:: sh
 
-    blacken-docs README.rst
+    ruffen-docs README.rst
 
-If any file is modified, ``blacken-docs`` exits nonzero.
+If any file is modified, ``ruffen-docs`` exits nonzero.
 
-``blacken-docs`` does not have any ability to recurse through directories.
+``ruffen-docs`` does not have any ability to recurse through directories.
 Use the pre-commit integration, globbing, or another technique for applying to many files.
 For example, |with git ls-files pipe xargs|_:
 
@@ -87,7 +87,7 @@ For example, |with git ls-files pipe xargs|_:
 
 .. code-block:: sh
 
-    git ls-files -z -- '*.md' | xargs -0 blacken-docs
+    git ls-files -z -- '*.md' | xargs -0 ruffen-docs
 
 …or PowerShell’s |ForEach-Object|__:
 
@@ -96,9 +96,9 @@ __ https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core
 
 .. code-block:: powershell
 
-    git ls-files -- '*.md' | %{blacken-docs $_}
+    git ls-files -- '*.md' | %{ruffen-docs $_}
 
-blacken-docs currently passes the following options through to Black:
+ruffen-docs currently passes the following options through to ruff:
 
 * |-l / --line-length|__
 
@@ -140,7 +140,7 @@ At the end of 2022, Adam Johnson took over maintenance.
 Supported code block formats
 ============================
 
-blacken-docs formats code blocks matching the following patterns.
+ruffen-docs formats code blocks matching the following patterns.
 
 Markdown
 --------
@@ -166,15 +166,15 @@ And “pycon” blocks:
 
     ```
 
-Prevent formatting within a block using ``blacken-docs:off`` and ``blacken-docs:on`` comments:
+Prevent formatting within a block using ``ruffen-docs:off`` and ``ruffen-docs:on`` comments:
 
 .. code-block:: markdown
 
-    <!-- blacken-docs:off -->
+    <!-- ruffen-docs:off -->
     ```python
     # whatever you want
     ```
-    <!-- blacken-docs:on -->
+    <!-- ruffen-docs:on -->
 
 Within Python files, docstrings that contain Markdown code blocks may be reformatted:
 
@@ -210,17 +210,17 @@ In “pycon” blocks:
         ...     print("hello world")
         ...
 
-Prevent formatting within a block using ``blacken-docs:off`` and ``blacken-docs:on`` comments:
+Prevent formatting within a block using ``ruffen-docs:off`` and ``ruffen-docs:on`` comments:
 
 .. code-block:: rst
 
-    .. blacken-docs:off
+    .. ruffen-docs:off
 
     .. code-block:: python
 
         # whatever you want
 
-    .. blacken-docs:on
+    .. ruffen-docs:on
 
 Use ``--rst-literal-blocks`` to also format `literal blocks <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#literal-blocks>`__:
 
@@ -278,12 +278,12 @@ In PythonTeX blocks:
         print("hello world")
     \end{pycode}
 
-Prevent formatting within a block using ``blacken-docs:off`` and ``blacken-docs:on`` comments:
+Prevent formatting within a block using ``ruffen-docs:off`` and ``ruffen-docs:on`` comments:
 
 .. code-block:: latex
 
-    % blacken-docs:off
+    % ruffen-docs:off
     \begin{minted}{python}
     # whatever you want
     \end{minted}
-    % blacken-docs:on
+    % ruffen-docs:on
