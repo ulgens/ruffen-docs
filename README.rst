@@ -11,6 +11,7 @@ blacken-docs
 .. image:: https://img.shields.io/github/checks-status/adamchainz/blacken-docs/main
    :alt: GitHub main branch status
 
+.. TODO: Use a dynamic badge
 .. image:: https://img.shields.io/badge/Coverage-100%25-success
   :target: https://github.com/adamchainz/blacken-docs/actions?workflow=CI
 
