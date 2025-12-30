@@ -2,20 +2,20 @@
 blacken-docs
 ============
 
-.. image:: https://img.shields.io/github/actions/workflow/status/adamchainz/blacken-docs/main.yml.svg?branch=main&style=for-the-badge
+.. image:: https://img.shields.io/github/actions/workflow/status/adamchainz/blacken-docs/main.yml.svg?branch=main
    :target: https://github.com/adamchainz/blacken-docs/actions?workflow=CI
 
-.. image:: https://img.shields.io/badge/Coverage-100%25-success?style=for-the-badge
+.. image:: https://img.shields.io/badge/Coverage-100%25-success
   :target: https://github.com/adamchainz/blacken-docs/actions?workflow=CI
 
-.. image:: https://img.shields.io/pypi/v/blacken-docs.svg?style=for-the-badge
+.. image:: https://img.shields.io/pypi/v/blacken-docs.svg
    :target: https://pypi.org/project/blacken-docs/
 
-.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=for-the-badge
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
    :target: https://github.com/astral-sh/ruff
    :alt: ruff
 
-.. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge
+.. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
    :target: https://github.com/pre-commit/pre-commit
    :alt: pre-commit
 
