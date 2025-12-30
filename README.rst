@@ -2,6 +2,9 @@
 blacken-docs
 ============
 
+.. image:: https://img.shields.io/pypi/pyversions/blacken-docs
+   :alt: PyPI - Python Version
+
 .. image:: https://img.shields.io/github/checks-status/adamchainz/blacken-docs/main
    :alt: GitHub main branch status
 
