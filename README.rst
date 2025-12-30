@@ -5,14 +5,15 @@ blacken-docs
 .. image:: https://img.shields.io/pypi/pyversions/blacken-docs
    :alt: PyPI - Python Version
 
+.. image:: https://img.shields.io/pypi/v/blacken-docs.svg
+   :target: https://pypi.org/project/blacken-docs/
+
 .. image:: https://img.shields.io/github/checks-status/adamchainz/blacken-docs/main
    :alt: GitHub main branch status
 
 .. image:: https://img.shields.io/badge/Coverage-100%25-success
   :target: https://github.com/adamchainz/blacken-docs/actions?workflow=CI
 
-.. image:: https://img.shields.io/pypi/v/blacken-docs.svg
-   :target: https://pypi.org/project/blacken-docs/
 
 .. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
    :target: https://github.com/astral-sh/ruff
