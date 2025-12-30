@@ -77,3 +77,13 @@ def run_black(argv: Sequence[str] | None = None) -> int:
             check_only=args.check,
         )
     return retv
+
+
+def run_check(argv: Sequence[str] | None = None) -> int:
+    ...
+    return 1
+
+
+def run_format(argv: Sequence[str] | None = None) -> int:
+    ...
+    return 1

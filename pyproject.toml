@@ -40,6 +40,8 @@ dependencies = [
 urls.Changelog = "https://github.com/ulgens/ruffen-docs/blob/main/CHANGELOG.rst"
 urls.Repository = "https://github.com/ulgens/ruffen-docs"
 scripts.blacken-docs = "ruffen_docs:run_black"
+scripts.ruffen-docs-check = "ruffen_docs:run_check"
+scripts.ruffen-docs-format = "ruffen_docs:run_format"
 
 [dependency-groups]
 test = [
