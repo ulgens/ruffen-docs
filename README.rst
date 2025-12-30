@@ -11,8 +11,9 @@ blacken-docs
 .. image:: https://img.shields.io/pypi/v/blacken-docs.svg?style=for-the-badge
    :target: https://pypi.org/project/blacken-docs/
 
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=for-the-badge
-   :target: https://github.com/psf/black
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=for-the-badge
+   :target: https://github.com/astral-sh/ruff
+   :alt: ruff
 
 .. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge
    :target: https://github.com/pre-commit/pre-commit
