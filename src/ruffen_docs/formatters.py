@@ -232,12 +232,10 @@ class BlackFormatter:
             else:
                 if off_start is not None:
                     self.off_ranges.append((off_start, comment.end()))
-                    print(self.off_ranges)
                     off_start = None
 
         if off_start is not None:
             self.off_ranges.append((off_start, len(src)))
-            print(self.off_ranges)
 
         src = MD_RE.sub(self._md_match, src)
         src = MD_PYCON_RE.sub(self._md_pycon_match, src)
