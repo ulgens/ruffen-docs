@@ -15,9 +15,9 @@ blacken-docs
    :target: https://github.com/astral-sh/ruff
    :alt: ruff
 
-.. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
-   :target: https://github.com/pre-commit/pre-commit
-   :alt: pre-commit
+.. image:: https://img.shields.io/badge/prek-enabled-orange
+   :target: https://github.com/j178/prek
+   :alt: prek enabled
 
 Run `Black <https://pypi.org/project/black/>`__ on Python code blocks in documentation files.
 
