@@ -5,3 +5,17 @@
     entry: blacken-docs
     language: python
     files: \.(rst|md|markdown|py|tex)$
+
+  - id: ruffen-docs-check
+    name: ruffen-docs-check
+    description: Run `ruff check` on Python code blocks in documentation files
+    entry: ruffen-docs-check
+    language: python
+    files: \.(rst|md|markdown|py|tex)$
+
+  - id: ruffen-docs-format
+    name: ruffen-docs-format
+    description: Run `ruff format` on Python code blocks in documentation files
+    entry: ruffen-docs-format
+    language: python
+    files: \.(rst|md|markdown|py|tex)$
