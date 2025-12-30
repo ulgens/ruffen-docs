@@ -10,7 +10,7 @@ from black.mode import TargetVersion
 from .formatters import BlackFormatter
 
 
-def run(argv: Sequence[str] | None = None) -> int:
+def run_black(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-l",

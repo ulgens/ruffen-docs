@@ -4,11 +4,11 @@ from textwrap import dedent
 
 from black import Mode
 
-from blacken_docs import (
+from ruffen_docs import (
     __main__,  # noqa: F401
-    run,
+    run_black,
 )
-from blacken_docs.formatters import BlackFormatter as Formatter
+from ruffen_docs.formatters import BlackFormatter as Formatter
 
 BLACK_MODE = Mode()
 
@@ -245,11 +245,11 @@ def test_format_src_markdown_pycon_twice():
 def test_format_src_markdown_comments_disable():
     before = dedent(
         """\
-        <!-- blacken-docs:off -->
+        <!-- ruffen-docs:off -->
         ```python
         'single quotes rock'
         ```
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:on -->
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
@@ -259,11 +259,11 @@ def test_format_src_markdown_comments_disable():
 def test_format_src_markdown_comments_disabled_enabled():
     before = dedent(
         """\
-        <!-- blacken-docs:off -->
+        <!-- ruffen-docs:off -->
         ```python
         'single quotes rock'
         ```
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:on -->
         ```python
         'double quotes rock'
         ```
@@ -272,11 +272,11 @@ def test_format_src_markdown_comments_disabled_enabled():
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
     assert after == dedent(
         """\
-        <!-- blacken-docs:off -->
+        <!-- ruffen-docs:off -->
         ```python
         'single quotes rock'
         ```
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:on -->
         ```python
         "double quotes rock"
         ```
@@ -287,8 +287,8 @@ def test_format_src_markdown_comments_disabled_enabled():
 def test_format_src_markdown_comments_before():
     before = dedent(
         """\
-        <!-- blacken-docs:off -->
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:off -->
+        <!-- ruffen-docs:on -->
         ```python
         'double quotes rock'
         ```
@@ -297,8 +297,8 @@ def test_format_src_markdown_comments_before():
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
     assert after == dedent(
         """\
-        <!-- blacken-docs:off -->
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:off -->
+        <!-- ruffen-docs:on -->
         ```python
         "double quotes rock"
         ```
@@ -312,8 +312,8 @@ def test_format_src_markdown_comments_after():
         ```python
         'double quotes rock'
         ```
-        <!-- blacken-docs:off -->
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:off -->
+        <!-- ruffen-docs:on -->
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
@@ -322,8 +322,8 @@ def test_format_src_markdown_comments_after():
         ```python
         "double quotes rock"
         ```
-        <!-- blacken-docs:off -->
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:off -->
+        <!-- ruffen-docs:on -->
         """
     )
 
@@ -332,7 +332,7 @@ def test_format_src_markdown_comments_only_on():
     # fmt: off
     before = dedent(
         """\
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:on -->
         ```python
         'double quotes rock'
         ```
@@ -341,7 +341,7 @@ def test_format_src_markdown_comments_only_on():
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
     assert after == dedent(
         """\
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:on -->
         ```python
         "double quotes rock"
         ```
@@ -354,7 +354,7 @@ def test_format_src_markdown_comments_only_off():
     # fmt: off
     before = dedent(
         """\
-        <!-- blacken-docs:off -->
+        <!-- ruffen-docs:off -->
         ```python
         'single quotes rock'
         ```
@@ -368,12 +368,12 @@ def test_format_src_markdown_comments_only_off():
 def test_format_src_markdown_comments_multiple():
     before = dedent(
         """\
-        <!-- blacken-docs:on -->
-        <!-- blacken-docs:off -->
-        <!-- blacken-docs:on -->
-        <!-- blacken-docs:on -->
-        <!-- blacken-docs:off -->
-        <!-- blacken-docs:off -->
+        <!-- ruffen-docs:on -->
+        <!-- ruffen-docs:off -->
+        <!-- ruffen-docs:on -->
+        <!-- ruffen-docs:on -->
+        <!-- ruffen-docs:off -->
+        <!-- ruffen-docs:off -->
         ```python
         'single quotes rock'
         ```
@@ -387,11 +387,11 @@ def test_on_off_comments_in_code_blocks():
     before = dedent(
         """\
         ````md
-        <!-- blacken-docs:off -->
+        <!-- ruffen-docs:off -->
         ```python
         f(1,2,3)
         ```
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:on -->
         ````
         """
     )
@@ -402,11 +402,11 @@ def test_on_off_comments_in_code_blocks():
 def test_format_src_markdown_comments_disable_pycon():
     before = dedent(
         """\
-        <!-- blacken-docs:off -->
+        <!-- ruffen-docs:off -->
         ```pycon
         >>> 'single quotes rock'
         ```
-        <!-- blacken-docs:on -->
+        <!-- ruffen-docs:on -->
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
@@ -542,11 +542,11 @@ def test_format_src_latex_minted_pycon_indented():
 def test_format_src_latex_minted_comments_off():
     before = dedent(
         """\
-        % blacken-docs:off
+        % ruffen-docs:off
         \\begin{minted}{python}
         'single quotes rock'
         \\end{minted}
-        % blacken-docs:on
+        % ruffen-docs:on
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
@@ -556,11 +556,11 @@ def test_format_src_latex_minted_comments_off():
 def test_format_src_latex_minted_comments_off_pycon():
     before = dedent(
         """\
-        % blacken-docs:off
+        % ruffen-docs:off
         \\begin{minted}{pycon}
         >>> 'single quotes rock'
         \\end{minted}
-        % blacken-docs:on
+        % ruffen-docs:on
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
@@ -594,11 +594,11 @@ def test_format_src_pythontex():
 def test_format_src_pythontex_comments_off():
     before = dedent(
         """\
-        % blacken-docs:off
+        % ruffen-docs:off
         \\begin{pyblock}
         f(1,2,3)
         \\end{pyblock}
-        % blacken-docs:on
+        % ruffen-docs:on
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
@@ -715,12 +715,12 @@ def test_format_src_rst_literal_blocks_empty():
 def test_format_src_rst_literal_blocks_comments():
     before = dedent(
         """\
-        .. blacken-docs:off
+        .. ruffen-docs:off
         Example::
 
             'single quotes rock'
 
-        .. blacken-docs:on
+        .. ruffen-docs:on
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before, rst_literal_blocks=True)
@@ -849,7 +849,7 @@ def test_format_src_rst_with_highlight_directives():
 def test_format_src_rst_python_inside_non_python_code_block():
     before = dedent(
         """\
-        blacken-docs does changes like:
+        ruffen-docs does changes like:
 
         .. code-block:: diff
 
@@ -866,12 +866,12 @@ def test_format_src_rst_python_inside_non_python_code_block():
 def test_format_src_rst_python_comments():
     before = dedent(
         """\
-        .. blacken-docs:off
+        .. ruffen-docs:off
         .. code-block:: python
 
             'single quotes rock'
 
-        .. blacken-docs:on
+        .. ruffen-docs:on
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
@@ -884,7 +884,7 @@ def test_integration_ok(tmp_path, capsys):
         "```python\nf(1, 2, 3)\n```\n",
     )
 
-    result = run((str(f),))
+    result = run_black((str(f),))
 
     assert result == 0
     assert not capsys.readouterr()[1]
@@ -897,7 +897,7 @@ def test_integration_modifies(tmp_path, capsys):
         "```python\nf(1,2,3)\n```\n",
     )
 
-    result = run((str(f),))
+    result = run_black((str(f),))
 
     assert result == 1
     out, _ = capsys.readouterr()
@@ -913,10 +913,10 @@ def test_integration_line_length(tmp_path):
         "```\n",
     )
 
-    result = run((str(f), "--line-length=80"))
+    result = run_black((str(f), "--line-length=80"))
     assert result == 0
 
-    result2 = run((str(f), "--line-length=50"))
+    result2 = run_black((str(f), "--line-length=50"))
     assert result2 == 1
     assert f.read_text() == (
         "```python\n"
@@ -939,7 +939,7 @@ def test_integration_check(tmp_path):
     )
     f.write_text(text)
 
-    result = run((str(f), "--check"))
+    result = run_black((str(f), "--check"))
 
     assert result == 1
     assert f.read_text() == text
@@ -957,7 +957,7 @@ def test_integration_preview(tmp_path):
         )
     )
 
-    result = run((str(f), "--preview"))
+    result = run_black((str(f), "--preview"))
 
     assert result == 1
     assert f.read_text() == dedent(
@@ -984,7 +984,7 @@ def test_integration_pyi(tmp_path):
         )
     )
 
-    result = run((str(f), "--pyi"))
+    result = run_black((str(f), "--pyi"))
 
     assert result == 1
     assert f.read_text() == dedent(
@@ -1010,10 +1010,10 @@ def test_integration_py36(tmp_path):
         "```\n",
     )
 
-    result = run((str(f),))
+    result = run_black((str(f),))
     assert result == 0
 
-    result2 = run((str(f), "--target-version=py36"))
+    result2 = run_black((str(f), "--target-version=py36"))
 
     assert result2 == 1
     assert f.read_text() == (
@@ -1041,10 +1041,10 @@ def test_integration_filename_last(tmp_path):
         "```\n",
     )
 
-    result = run((str(f),))
+    result = run_black((str(f),))
     assert result == 0
 
-    result2 = run(("--target-version", "py36", str(f)))
+    result2 = run_black(("--target-version", "py36", str(f)))
 
     assert result2 == 1
     assert f.read_text() == (
@@ -1072,10 +1072,10 @@ def test_integration_multiple_target_version(tmp_path):
         "```\n",
     )
 
-    result = run((str(f),))
+    result = run_black((str(f),))
     assert result == 0
 
-    result2 = run(
+    result2 = run_black(
         ("--target-version", "py35", "--target-version", "py36", str(f)),
     )
     assert result2 == 0
@@ -1087,7 +1087,7 @@ def test_integration_skip_string_normalization(tmp_path):
         "```python\nf('hi')\n```\n",
     )
 
-    result = run((str(f), "--skip-string-normalization"))
+    result = run_black((str(f), "--skip-string-normalization"))
 
     assert result == 0
     assert f.read_text() == ("```python\nf('hi')\n```\n")
@@ -1099,7 +1099,7 @@ def test_integration_syntax_error(tmp_path, capsys):
         "```python\nf(\n```\n",
     )
 
-    result = run((str(f),))
+    result = run_black((str(f),))
 
     assert result == 2
     out, _ = capsys.readouterr()
@@ -1113,7 +1113,7 @@ def test_integration_ignored_syntax_error(tmp_path, capsys):
         "```python\nf( )\n```\n\n```python\nf(\n```\n",
     )
 
-    result = run((str(f), "--skip-errors"))
+    result = run_black((str(f), "--skip-errors"))
 
     assert result == 1
     assert f.read_text() == ("```python\nf()\n```\n\n```python\nf(\n```\n")
@@ -1526,12 +1526,12 @@ def test_format_src_rst_pycon_comment_before_promopt():
 def test_format_src_rst_pycon_comments():
     before = dedent(
         """\
-        .. blacken-docs:off
+        .. ruffen-docs:off
         .. code-block:: pycon
 
             >>> 'single quotes rock'
 
-        .. blacken-docs:on
+        .. ruffen-docs:on
         """
     )
     after, _ = Formatter(mode=BLACK_MODE).format_str(before)
