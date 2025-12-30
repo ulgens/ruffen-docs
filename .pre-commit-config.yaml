@@ -26,6 +26,13 @@ repos:
       - id: pyproject-fmt
         args: [--indent, '4', --keep-full-version]
 
+  - repo: https://github.com/ulgens/uv-lock-check
+    rev: v0.1.0
+    hooks:
+      - id: uv-lock-check
+        additional_dependencies:
+          - uv==0.9.18
+
   - repo: https://github.com/tox-dev/tox-ini-fmt
     rev: 1.7.1
     hooks:
