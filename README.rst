@@ -134,8 +134,7 @@ It also has the below extra options:
 History
 =======
 
-blacken-docs was created by `Anthony Sottile <https://github.com/asottile/>`__ in 2018.
-At the end of 2022, Adam Johnson took over maintenance.
+ruffen-docs is a fork of `blacken-docs <https://github.com/adamchainz/blacken-docs/>`__. The project is currently maintained by @ulgens.
 
 Supported code block formats
 ============================
