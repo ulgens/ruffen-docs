@@ -33,6 +33,9 @@ classifiers = [
 ]
 dependencies = [
     "black>=22.1",
+    # Earliest version Python 3.14 support
+    # https://github.com/astral-sh/ruff/releases/tag/0.14.1
+    "ruff>=0.14.1",
 ]
 urls.Changelog = "https://github.com/ulgens/ruffen-docs/blob/main/CHANGELOG.rst"
 urls.Repository = "https://github.com/ulgens/ruffen-docs"
