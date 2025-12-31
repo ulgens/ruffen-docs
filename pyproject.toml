@@ -72,7 +72,6 @@ source = [
 [tool.coverage.paths]
 source = [
     "src",
-    ".tox/**/site-packages",
 ]
 
 [tool.coverage.report]
