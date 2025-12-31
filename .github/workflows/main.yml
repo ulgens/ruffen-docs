@@ -35,10 +35,14 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
+          activate-environment: true
           # TODO: Do we need `allow-prereleases: true`?
 
-      - name: Run tox targets for ${{ matrix.python-version }}
-        run: uvx --with tox-uv tox run -f py$(echo ${{ matrix.python-version }} | tr -d .)
+      - name: Install test dependencies
+        run: uv sync --group test --frozen
+
+      - name: Run tests for ${{ matrix.python-version }}
+        run: coverage run -m pytest
 
       - name: Upload coverage data
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
