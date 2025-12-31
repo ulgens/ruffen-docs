@@ -216,7 +216,7 @@ class BlackFormatter:
 
         return f"{match['before']}{code}{match['after']}"
 
-    def format_str(
+    def process_str(
         self,
         src: str,
         *,
@@ -252,7 +252,7 @@ class BlackFormatter:
 
         return src, self.errors
 
-    def format_file(
+    def process_file(
         self,
         filename: str,
         skip_errors: bool,
@@ -262,7 +262,7 @@ class BlackFormatter:
         with Path(filename).open(encoding="UTF-8") as f:
             contents = f.read()
 
-        new_contents, errors = self.format_str(
+        new_contents, errors = self.process_str(
             contents,
             rst_literal_blocks=rst_literal_blocks,
         )
