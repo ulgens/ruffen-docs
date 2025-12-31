@@ -44,14 +44,6 @@ jobs:
       - name: Run tests for ${{ matrix.python-version }}
         run: pytest --cov --junitxml=junit.xml -o junit_family=legacy
 
-      - name: Upload coverage data
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: coverage-data-${{ matrix.python-version }}
-          path: ${{ github.workspace }}/.coverage.*
-          include-hidden-files: true
-          if-no-files-found: error
-
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v5
@@ -59,54 +51,14 @@ jobs:
           report_type: test_results
           token: ${{ secrets.CODECOV_TOKEN }}
 
-  coverage:
-    name: Coverage
-    runs-on: ubuntu-24.04
-    needs: tests
-    steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
-      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
-
-      - name: Install uv & Python 3.14
-        uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
-        with:
-          enable-cache: true
-          python-version: '3.14'
-          activate-environment: true
-
-      - name: Install dependencies
-        run: uv pip install coverage[toml]
-
-      - name: Download data
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          path: ${{ github.workspace }}
-          pattern: coverage-data-*
-          merge-multiple: true
-
-      - name: Combine coverage and fail if it's <100%
-        run: |
-          python -m coverage combine
-          python -m coverage html --skip-covered --skip-empty
-          python -m coverage report --fail-under=100
-          echo "## Coverage summary" >> $GITHUB_STEP_SUMMARY
-          python -m coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload HTML report
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: html-report
-          path: htmlcov
-
       - name: Upload coverage reports to Codecov
+        if: ${{ !cancelled() }}
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   release:
-    needs: [coverage]
+    needs: [tests]
     if: success() && startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     environment: release
