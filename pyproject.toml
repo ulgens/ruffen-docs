@@ -48,6 +48,7 @@ test = [
     "black>=22.1",
     "coverage[toml]",
     "pytest",
+    "pytest-cov",
     "pytest-randomly",
 ]
 
