@@ -42,7 +42,7 @@ jobs:
         run: uv sync --group test --frozen
 
       - name: Run tests for ${{ matrix.python-version }}
-        run: coverage run -m pytest
+        run: pytest --cov --junitxml=junit.xml -o junit_family=legacy
 
       - name: Upload coverage data
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
@@ -51,6 +51,12 @@ jobs:
           path: ${{ github.workspace }}/.coverage.*
           include-hidden-files: true
           if-no-files-found: error
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   coverage:
     name: Coverage
