@@ -31,11 +31,17 @@ from .regex_patterns import (
 )
 
 
-class BlackFormatter:
-    def __init__(self, mode: Mode) -> None:
-        self.mode: Mode = mode
+class BaseProcessor:
+    """
+    Base class for processing code blocks in documents.
+    """
+
+    def __init__(self) -> None:
         self.errors: list[CodeBlockError] = []
         self.off_ranges: list[tuple[int, int]] = []
+
+    def process_code_block(self, code_block: str) -> str:
+        raise NotImplementedError  # pragma: no cover
 
     def _within_off_range(self, code_range: tuple[int, int]) -> bool:
         index = bisect(self.off_ranges, code_range)
@@ -63,7 +69,7 @@ class BlackFormatter:
         code = textwrap.dedent(match["code"])
 
         with self._collect_error(match):
-            code = black.format_str(code, mode=self.mode)
+            code = self.process_code_block(code)
 
         code = textwrap.indent(code, match["indent"])
 
@@ -88,7 +94,7 @@ class BlackFormatter:
         code = textwrap.dedent(match["code"])
 
         with self._collect_error(match):
-            code = black.format_str(code, mode=self.mode)
+            code = self.process_code_block(code)
 
         code = textwrap.indent(code, min_indent)
 
@@ -109,7 +115,7 @@ class BlackFormatter:
         code = textwrap.dedent(match["code"])
 
         with self._collect_error(match):
-            code = black.format_str(code, mode=self.mode)
+            code = self.process_code_block(code)
 
         code = textwrap.indent(code, min_indent)
 
@@ -125,7 +131,7 @@ class BlackFormatter:
 
             if fragment is not None:
                 with self._collect_error(match):
-                    fragment = black.format_str(fragment, mode=self.mode)
+                    fragment = self.process_code_block(fragment)
 
                 fragment_lines = fragment.splitlines()
                 code += f"{PYCON_PREFIX}{fragment_lines[0]}\n"
@@ -201,7 +207,7 @@ class BlackFormatter:
         code = textwrap.dedent(match["code"])
 
         with self._collect_error(match):
-            code = black.format_str(code, mode=self.mode)
+            code = self.process_code_block(code)
 
         code = textwrap.indent(code, match["indent"])
 
@@ -287,3 +293,12 @@ class BlackFormatter:
             f.write(new_contents)
 
         return 1
+
+
+class BlackFormatter(BaseProcessor):
+    def __init__(self, mode: Mode) -> None:
+        super().__init__()
+        self.mode: Mode = mode
+
+    def process_code_block(self, code_block: str) -> str:
+        return black.format_str(code_block, mode=self.mode)
