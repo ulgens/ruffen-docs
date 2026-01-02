@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 from collections.abc import Sequence
 
-import black
 from black.const import DEFAULT_LINE_LENGTH
 from black.mode import TargetVersion
 
@@ -59,17 +58,17 @@ def run_black(argv: Sequence[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    black_mode = black.Mode(
-        target_versions=set(args.target_versions),
-        line_length=args.line_length,
-        string_normalization=not args.skip_string_normalization,
-        is_pyi=args.pyi,
-        preview=args.preview,
-    )
+    formatter_kwargs = {
+        "target_versions": set(args.target_versions),
+        "line_length": args.line_length,
+        "string_normalization": not args.skip_string_normalization,
+        "is_pyi": args.pyi,
+        "preview": args.preview,
+    }
 
     retv = 0
     for filename in args.filenames:
-        formatter = BlackFormatter(mode=black_mode)
+        formatter = BlackFormatter(**formatter_kwargs)
         retv |= formatter.format_file(
             filename,
             skip_errors=args.skip_errors,

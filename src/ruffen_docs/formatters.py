@@ -10,6 +10,8 @@ from re import Match
 
 import black
 from black import Mode
+from black.const import DEFAULT_LINE_LENGTH
+from black.mode import TargetVersion
 
 from .constants import PYGMENTS_PY_LANGS
 from .errors import CodeBlockError
@@ -32,10 +34,30 @@ from .regex_patterns import (
 
 
 class BlackFormatter:
-    def __init__(self, mode: Mode) -> None:
-        self.mode: Mode = mode
+    def __init__(
+        self,
+        # FIXME:
+        #   The original default value fails with
+        #   > TypeError: set object expected; got dataclasses.Field
+        target_versions: set[TargetVersion] | None = None,
+        line_length: int = DEFAULT_LINE_LENGTH,
+        string_normalization: bool = True,
+        is_pyi: bool = False,
+        preview: bool = False,
+    ) -> None:
+        if target_versions is None:
+            target_versions = set()
+
         self.errors: list[CodeBlockError] = []
         self.off_ranges: list[tuple[int, int]] = []
+
+        self.mode: Mode = Mode(
+            target_versions=target_versions,
+            line_length=line_length,
+            string_normalization=string_normalization,
+            is_pyi=is_pyi,
+            preview=preview,
+        )
 
     def _within_off_range(self, code_range: tuple[int, int]) -> bool:
         index = bisect(self.off_ranges, code_range)

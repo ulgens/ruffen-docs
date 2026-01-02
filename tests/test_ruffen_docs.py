@@ -14,7 +14,7 @@ BLACK_MODE = Mode()
 
 
 def test_format_src_trivial():
-    after, _ = Formatter(mode=BLACK_MODE).format_str("")
+    after, _ = Formatter().format_str("")
     assert after == ""
 
 
@@ -26,7 +26,7 @@ def test_format_src_markdown_simple():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         ```python
@@ -44,7 +44,7 @@ def test_format_src_markdown_leading_whitespace():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         ```   python
@@ -63,7 +63,7 @@ def test_format_src_markdown_python_after_newline():
         ```
         """
     )
-    after, errors = Formatter(mode=BLACK_MODE).format_str(before)
+    after, errors = Formatter().format_str(before)
     assert errors == []
     assert after == before
 
@@ -76,7 +76,7 @@ def test_format_src_markdown_short_name():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         ```   py
@@ -94,7 +94,7 @@ def test_format_src_markdown_options():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         ```python title='example.py'
@@ -111,7 +111,7 @@ def test_format_src_markdown_trailing_whitespace():
         f(1,2,3)
         ```    \n"""
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         ```python
@@ -130,7 +130,7 @@ def test_format_src_indented_markdown():
         - also this
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         - do this pls:
@@ -155,7 +155,7 @@ def test_format_src_markdown_pycon():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -179,7 +179,7 @@ def test_format_src_markdown_pycon_after_newline():
         ```
         """
     )
-    after, errors = Formatter(mode=BLACK_MODE).format_str(before)
+    after, errors = Formatter().format_str(before)
     assert errors == []
     assert after == before
 
@@ -197,7 +197,7 @@ def test_format_src_markdown_pycon_options():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -226,7 +226,7 @@ def test_format_src_markdown_pycon_twice():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         ```pycon
@@ -252,7 +252,7 @@ def test_format_src_markdown_comments_disable():
         <!-- ruffen-docs:on -->
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -269,7 +269,7 @@ def test_format_src_markdown_comments_disabled_enabled():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         <!-- ruffen-docs:off -->
@@ -294,7 +294,7 @@ def test_format_src_markdown_comments_before():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         <!-- ruffen-docs:off -->
@@ -316,7 +316,7 @@ def test_format_src_markdown_comments_after():
         <!-- ruffen-docs:on -->
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         ```python
@@ -338,7 +338,7 @@ def test_format_src_markdown_comments_only_on():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         <!-- ruffen-docs:on -->
@@ -361,7 +361,7 @@ def test_format_src_markdown_comments_only_off():
         """
     )
     # fmt: on
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -379,7 +379,7 @@ def test_format_src_markdown_comments_multiple():
         ```
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -395,7 +395,7 @@ def test_on_off_comments_in_code_blocks():
         ````
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -409,7 +409,7 @@ def test_format_src_markdown_comments_disable_pycon():
         <!-- ruffen-docs:on -->
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -423,7 +423,7 @@ def test_format_src_latex_minted():
         world!
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -448,7 +448,7 @@ def test_format_src_latex_minted_opt():
         done
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         maths!
@@ -476,7 +476,7 @@ def test_format_src_latex_minted_indented():
         world!
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -500,7 +500,7 @@ def test_format_src_latex_minted_pycon():
         Following text.
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         Preceding text
@@ -526,7 +526,7 @@ def test_format_src_latex_minted_pycon_indented():
         Following text.
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         Preceding text
@@ -549,7 +549,7 @@ def test_format_src_latex_minted_comments_off():
         % ruffen-docs:on
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -563,7 +563,7 @@ def test_format_src_latex_minted_comments_off_pycon():
         % ruffen-docs:on
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -578,7 +578,7 @@ def test_format_src_pythontex():
         world!
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -601,7 +601,7 @@ def test_format_src_pythontex_comments_off():
         % ruffen-docs:on
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -617,7 +617,7 @@ def test_format_src_rst():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -633,7 +633,7 @@ def test_format_src_rst():
 
 def test_format_src_rst_empty():
     before = "some text\n\n.. code-block:: python\n\n\nsome other text\n"
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -647,7 +647,7 @@ def test_format_src_rst_literal_blocks():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(
+    after, _ = Formatter().format_str(
         before,
         rst_literal_blocks=True,
     )
@@ -669,7 +669,7 @@ def test_format_src_rst_literal_block_empty():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(
+    after, _ = Formatter().format_str(
         before,
         rst_literal_blocks=True,
     )
@@ -686,7 +686,7 @@ def test_format_src_rst_literal_blocks_nested():
             don't hello too much
         """,
     )
-    after, errors = Formatter(mode=BLACK_MODE).format_str(
+    after, errors = Formatter().format_str(
         before,
         rst_literal_blocks=True,
     )
@@ -704,7 +704,7 @@ def test_format_src_rst_literal_blocks_empty():
             There was no example.
         """,
     )
-    after, errors = Formatter(mode=BLACK_MODE).format_str(
+    after, errors = Formatter().format_str(
         before,
         rst_literal_blocks=True,
     )
@@ -723,7 +723,7 @@ def test_format_src_rst_literal_blocks_comments():
         .. ruffen-docs:on
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before, rst_literal_blocks=True)
+    after, _ = Formatter().format_str(before, rst_literal_blocks=True)
     assert after == before
 
 
@@ -750,7 +750,7 @@ def test_format_src_rst_sphinx_doctest():
 
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. testsetup:: group1
@@ -791,7 +791,7 @@ def test_format_src_rst_indented():
             world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. versionadded:: 3.1
@@ -814,7 +814,7 @@ def test_format_src_rst_code_block_indent():
         "   ",
         "   f(1,2,3)\n",
     ])
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == "\n".join([
         ".. code-block:: python",
         "   ",
@@ -833,7 +833,7 @@ def test_format_src_rst_with_highlight_directives():
                 bar(1,2,3)
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: python
@@ -859,7 +859,7 @@ def test_format_src_rst_python_inside_non_python_code_block():
             +    "Hello World"
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -874,7 +874,7 @@ def test_format_src_rst_python_comments():
         .. ruffen-docs:on
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -1131,7 +1131,7 @@ def test_format_src_rst_jupyter_sphinx():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -1158,7 +1158,7 @@ def test_format_src_rst_jupyter_sphinx_with_directive():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -1187,7 +1187,7 @@ def test_format_src_python_docstring_markdown():
             pass
         '''
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         '''\
         def f():
@@ -1217,7 +1217,7 @@ def test_format_src_python_docstring_rst():
             pass
         '''
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         '''\
         def f():
@@ -1246,7 +1246,7 @@ def test_format_src_rst_pycon():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         hello
@@ -1273,7 +1273,7 @@ def test_format_src_rst_pycon_with_continuation():
 
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1290,7 +1290,7 @@ def test_format_src_rst_pycon_with_continuation():
 
 def test_format_src_rst_pycon_adds_continuation():
     before = '.. code-block:: pycon\n\n    >>> d = {"a": 1,"b": 2,"c": 3,}\n\n'
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1319,7 +1319,7 @@ def test_format_src_rst_pycon_preserves_trailing_whitespace():
         world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -1339,7 +1339,7 @@ def test_format_src_rst_pycon_indented():
             world
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. versionadded:: 3.1
@@ -1367,7 +1367,7 @@ def test_format_src_rst_pycon_code_block_is_final_line1():
             ...
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1381,7 +1381,7 @@ def test_format_src_rst_pycon_code_block_is_final_line1():
 
 def test_format_src_rst_pycon_code_block_is_final_line2():
     before = ".. code-block:: pycon\n\n    >>> if True:\n    ...   pass\n"
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1403,7 +1403,7 @@ def test_format_src_rst_pycon_nested_def1():
             ...
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1425,7 +1425,7 @@ def test_format_src_rst_pycon_nested_def2():
             ...     def f(): pass
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1449,7 +1449,7 @@ def test_format_src_rst_pycon_empty_line():
             ... ]
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1472,7 +1472,7 @@ def test_format_src_rst_pycon_preserves_output_indentation():
             ZeroDivisionError: division by zero
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
@@ -1487,19 +1487,19 @@ def test_format_src_rst_pycon_elided_traceback():
             ZeroDivisionError: division by zero
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
 def test_format_src_rst_pycon_no_prompt():
     before = ".. code-block:: pycon\n\n    pass\n"
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
 def test_format_src_rst_pycon_no_trailing_newline():
     before = ".. code-block:: pycon\n\n    >>> pass"
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == (".. code-block:: pycon\n\n    >>> pass\n")
 
 
@@ -1512,7 +1512,7 @@ def test_format_src_rst_pycon_comment_before_promopt():
             >>> pass
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == dedent(
         """\
         .. code-block:: pycon
@@ -1534,11 +1534,11 @@ def test_format_src_rst_pycon_comments():
         .. ruffen-docs:on
         """
     )
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
 
 
 def test_format_src_rst_pycon_empty():
     before = "some text\n\n.. code-block:: pycon\n\n\nsome other text\n"
-    after, _ = Formatter(mode=BLACK_MODE).format_str(before)
+    after, _ = Formatter().format_str(before)
     assert after == before
