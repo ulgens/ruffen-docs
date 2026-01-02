@@ -3,6 +3,7 @@ from __future__ import annotations
 import contextlib
 import re
 import textwrap
+from abc import ABC, abstractmethod
 from bisect import bisect
 from collections.abc import Generator, Sequence
 from pathlib import Path
@@ -32,35 +33,17 @@ from .regex_patterns import (
     TRAILING_NL_RE,
 )
 
+__all__ = ("BlackFormatter",)
 
-class BlackFormatter:
-    def __init__(
-        self,
-        # FIXME:
-        #   The original default value fails with
-        #   > TypeError: set object expected; got dataclasses.Field
-        target_versions: set[TargetVersion] | None = None,
-        line_length: int = DEFAULT_LINE_LENGTH,
-        string_normalization: bool = True,
-        is_pyi: bool = False,
-        preview: bool = False,
-    ) -> None:
-        if target_versions is None:
-            target_versions = set()
 
+class BaseProcessor(ABC):
+    def __init__(self) -> None:
         self.errors: list[CodeBlockError] = []
         self.off_ranges: list[tuple[int, int]] = []
 
-        self.mode: Mode = Mode(
-            target_versions=target_versions,
-            line_length=line_length,
-            string_normalization=string_normalization,
-            is_pyi=is_pyi,
-            preview=preview,
-        )
-
+    @abstractmethod
     def process_code_block(self, code_block: str) -> str:
-        return black.format_str(code_block, mode=self.mode)
+        pass  # pragma: no cover
 
     def _within_off_range(self, code_range: tuple[int, int]) -> bool:
         index = bisect(self.off_ranges, code_range)
@@ -312,3 +295,32 @@ class BlackFormatter:
             f.write(new_contents)
 
         return 1
+
+
+class BlackFormatter(BaseProcessor):
+    def __init__(
+        self,
+        # FIXME:
+        #   The original default value fails with
+        #   > TypeError: set object expected; got dataclasses.Field
+        target_versions: set[TargetVersion] | None = None,
+        line_length: int = DEFAULT_LINE_LENGTH,
+        string_normalization: bool = True,
+        is_pyi: bool = False,
+        preview: bool = False,
+    ) -> None:
+        if target_versions is None:
+            target_versions = set()
+
+        self.mode: Mode = Mode(
+            target_versions=target_versions,
+            line_length=line_length,
+            string_normalization=string_normalization,
+            is_pyi=is_pyi,
+            preview=preview,
+        )
+
+        super().__init__()
+
+    def process_code_block(self, code_block: str) -> str:
+        return black.format_str(code_block, mode=self.mode)
