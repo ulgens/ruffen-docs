@@ -270,8 +270,8 @@ class BaseProcessor(ABC):
         self,
         filename: str,
         skip_errors: bool,
-        rst_literal_blocks: bool,
-        check_only: bool,
+        rst_literal_blocks: bool = True,
+        check_only: bool = False,
     ) -> int:
         with Path(filename).open(encoding="UTF-8") as f:
             contents = f.read()
