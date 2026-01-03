@@ -48,13 +48,25 @@ repos:
         args: [--fix]
       - id: ruff-format
 
-  - repo: https://github.com/ulgens/ruffen-docs
-    rev: 1def1ebbc1bd7f6b9934121948d0d06515f71e3f
+  - repo: .
+    rev: 7ed7e55de4a6515a97ee8c2202db2842d00b2b6c
     hooks:
       - id: blacken-docs
         language: python
         additional_dependencies:
           - black==25.12.0
+        files: \.rst$
+
+      - id: ruffen-docs-check
+        language: python
+        additional_dependencies:
+          - ruff==0.14.10
+        files: \.rst$
+
+      - id: ruffen-docs-format
+        language: python
+        additional_dependencies:
+          - ruff==0.14.10
         files: \.rst$
 
   - repo: https://github.com/pre-commit/mirrors-mypy

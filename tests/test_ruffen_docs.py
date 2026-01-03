@@ -8,7 +8,7 @@ from ruffen_docs import (
     __main__,  # noqa: F401
     run_black,
 )
-from ruffen_docs.formatters import BlackFormatter as Formatter
+from ruffen_docs.processors import BlackFormatter as Formatter
 
 BLACK_MODE = Mode()
 

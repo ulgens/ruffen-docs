@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from black.const import DEFAULT_LINE_LENGTH
 from black.mode import TargetVersion
 
-from .formatters import BlackFormatter
+from .processors import BlackFormatter, RuffChecker, RuffFormatter
 
 
 def run_black(argv: Sequence[str] | None = None) -> int:
@@ -68,6 +68,7 @@ def run_black(argv: Sequence[str] | None = None) -> int:
 
     retv = 0
     for filename in args.filenames:
+        print(filename)
         formatter = BlackFormatter(**formatter_kwargs)
         retv |= formatter.format_file(
             filename,
@@ -79,10 +80,64 @@ def run_black(argv: Sequence[str] | None = None) -> int:
 
 
 def run_check(argv: Sequence[str] | None = None) -> int:
-    ...
-    return 1
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-l",
+        "--line-length",
+        type=int,
+        default=DEFAULT_LINE_LENGTH,
+    )
+    parser.add_argument(
+        "-S",
+        "--skip-string-normalization",
+        action="store_true",
+    )
+    parser.add_argument("-E", "--skip-errors", action="store_true")
+    parser.add_argument("filenames", nargs="*")
+    args = parser.parse_args(argv)
+
+    retv = 0
+
+    for filename in args.filenames:
+        formatter = RuffChecker()
+        retv |= formatter.format_file(
+            filename,
+            skip_errors=args.skip_errors,
+            # rst_literal_blocks=args.rst_literal_blocks,
+            # check_only=args.check,
+        )
+
+    return retv
 
 
 def run_format(argv: Sequence[str] | None = None) -> int:
-    ...
-    return 1
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-l",
+        "--line-length",
+        type=int,
+        default=DEFAULT_LINE_LENGTH,
+    )
+    parser.add_argument(
+        "-S",
+        "--skip-string-normalization",
+        action="store_true",
+    )
+    parser.add_argument("-E", "--skip-errors", action="store_true")
+    parser.add_argument("filenames", nargs="*")
+    args = parser.parse_args(argv)
+
+    filenames = []
+
+    retv = 0
+
+    for filename in filenames:
+        formatter = RuffFormatter()
+        retv |= formatter.format_file(
+            filename,
+            skip_errors=args.skip_errors,
+            # rst_literal_blocks=args.rst_literal_blocks,
+            # check_only=args.check,
+        )
+
+    return retv

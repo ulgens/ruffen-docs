@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 import re
+import subprocess
 import textwrap
 from abc import ABC, abstractmethod
 from bisect import bisect
@@ -13,6 +14,7 @@ import black
 from black import Mode
 from black.const import DEFAULT_LINE_LENGTH
 from black.mode import TargetVersion
+from ruff.__main__ import find_ruff_bin
 
 from .constants import PYGMENTS_PY_LANGS
 from .errors import CodeBlockError
@@ -33,7 +35,11 @@ from .regex_patterns import (
     TRAILING_NL_RE,
 )
 
-__all__ = ("BlackFormatter",)
+__all__ = (
+    "BlackFormatter",
+    "RuffChecker",
+    "RuffFormatter",
+)
 
 
 class BaseProcessor(ABC):
@@ -264,8 +270,8 @@ class BaseProcessor(ABC):
         self,
         filename: str,
         skip_errors: bool,
-        rst_literal_blocks: bool,
-        check_only: bool,
+        rst_literal_blocks: bool = True,
+        check_only: bool = False,
     ) -> int:
         with Path(filename).open(encoding="UTF-8") as f:
             contents = f.read()
@@ -324,3 +330,39 @@ class BlackFormatter(BaseProcessor):
 
     def process_code_block(self, code_block: str) -> str:
         return black.format_str(code_block, mode=self.mode)
+
+
+class RuffChecker(BaseProcessor):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def process_code_block(self, code_block: str) -> str:
+        # https://gist.github.com/jorenham/63942278b01515ffdeb0c7d4d1895684
+        result = subprocess.run(
+            [find_ruff_bin(), "check", "-"],
+            input=code_block,
+            text=True,
+            capture_output=True,
+            # check=True,
+            cwd=Path.cwd(),
+        )
+        result.check_returncode()
+        return result.stdout
+
+
+class RuffFormatter(BaseProcessor):
+    def __init__(self) -> None:
+        super().__init__()
+
+    def process_code_block(self, code_block: str) -> str:
+        # https://gist.github.com/jorenham/63942278b01515ffdeb0c7d4d1895684
+        result = subprocess.run(
+            [find_ruff_bin(), "format", "-"],
+            input=code_block,
+            text=True,
+            capture_output=True,
+            # check=True,
+            cwd=Path.cwd(),
+        )
+        result.check_returncode()
+        return result.stdout
