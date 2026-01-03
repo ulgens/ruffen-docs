@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from black.const import DEFAULT_LINE_LENGTH
 from black.mode import TargetVersion
 
-from .formatters import BlackFormatter
+from .processors import BlackFormatter
 
 
 def run_black(argv: Sequence[str] | None = None) -> int:
