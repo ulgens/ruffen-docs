@@ -270,8 +270,8 @@ class BaseProcessor(ABC):
         self,
         filename: str,
         skip_errors: bool,
-        rst_literal_blocks: bool,
-        check_only: bool,
+        rst_literal_blocks: bool = True,
+        check_only: bool = False,
     ) -> int:
         with Path(filename).open(encoding="UTF-8") as f:
             contents = f.read()
@@ -338,16 +338,15 @@ class RuffChecker(BaseProcessor):
 
     def process_code_block(self, code_block: str) -> str:
         # https://gist.github.com/jorenham/63942278b01515ffdeb0c7d4d1895684
-        result = subprocess.run(
-            [find_ruff_bin(), "check", "-"],
+        result = subprocess.check_output(
+            f"{find_ruff_bin()} check --fix -",
             input=code_block,
-            text=True,
-            capture_output=True,
-            # check=True,
             cwd=Path.cwd(),
+            shell=True,
+            encoding="utf-8",
         )
-        result.check_returncode()
-        return result.stdout
+
+        return result
 
 
 class RuffFormatter(BaseProcessor):
@@ -356,13 +355,12 @@ class RuffFormatter(BaseProcessor):
 
     def process_code_block(self, code_block: str) -> str:
         # https://gist.github.com/jorenham/63942278b01515ffdeb0c7d4d1895684
-        result = subprocess.run(
-            [find_ruff_bin(), "format", "-"],
+        result = subprocess.check_output(
+            f"{find_ruff_bin()} format --fix -",
             input=code_block,
-            text=True,
-            capture_output=True,
-            # check=True,
             cwd=Path.cwd(),
+            shell=True,
+            encoding="utf-8",
         )
-        result.check_returncode()
-        return result.stdout
+
+        return result
