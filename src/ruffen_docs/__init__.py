@@ -68,8 +68,8 @@ def run_black(argv: Sequence[str] | None = None) -> int:
 
     retv = 0
     for filename in args.filenames:
-        formatter = BlackFormatter(**formatter_kwargs)
-        retv |= formatter.format_file(
+        processor = BlackFormatter(**formatter_kwargs)
+        retv |= processor.process_file(
             filename,
             skip_errors=args.skip_errors,
             rst_literal_blocks=args.rst_literal_blocks,
