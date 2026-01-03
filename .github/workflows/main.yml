@@ -13,6 +13,10 @@ concurrency:
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+env:
+  # renovate: datasource=pypi depName=uv
+  UV_VERSION: 0.9.21
+
 jobs:
   tests:
     name: Python ${{ matrix.python-version }}
@@ -31,10 +35,11 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: Install uv & Python ${{ matrix.python-version }}
+      - name: Install uv ${{ env.UV_VERSION }} & Python ${{ env.PYTHON_VERSION }}
         uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
         with:
           enable-cache: true
+          version: ${{ env.UV_VERSION }}
           python-version: ${{ matrix.python-version }}
           activate-environment: true
           # allow-prereleases: true
