@@ -39,10 +39,10 @@ repos:
       - id: rstcheck
         language: python
         additional_dependencies:
-          - tomli==2.3.0
+          - tomli==2.4.0
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.10
+    rev: v0.14.14
     hooks:
       - id: ruff-check
         args: [--fix]
