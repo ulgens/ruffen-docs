@@ -49,6 +49,7 @@ test = [
     "pytest",
     "pytest-cov",
     "pytest-randomly",
+    "ty>=0.0.11",      # Earliest version with Python 3.14 support
 ]
 
 [tool.pyproject-fmt]
@@ -75,17 +76,9 @@ paths.source = [
 ]
 report.show_missing = true
 
-[tool.mypy]
-enable_error_code = [
-    "ignore-without-code",
-    "redundant-expr",
-    "truthy-bool",
-]
-mypy_path = "src/"
-namespace_packages = false
-strict = true
-warn_unreachable = true
-overrides = [ { module = "tests.*", allow_untyped_defs = true } ]
+[tool.ty]
+rules.all = "error"
+terminal.error-on-warning = true
 
 [tool.rstcheck]
 report_level = "ERROR"
