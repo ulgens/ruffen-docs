@@ -37,9 +37,6 @@ repos:
     rev: v6.2.5
     hooks:
       - id: rstcheck
-        language: python
-        additional_dependencies:
-          - tomli==2.4.0
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.15.5

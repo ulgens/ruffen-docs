@@ -35,7 +35,7 @@ Use **pip**:
 
     python -m pip install ruffen-docs
 
-Python 3.11 to 3.14 supported.
+Python 3.12 to 3.14 supported.
 
 ruff 0.14.1+ supported.
 
