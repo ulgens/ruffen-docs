@@ -58,17 +58,21 @@ def run_black(argv: Sequence[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    formatter_kwargs = {
-        "target_versions": set(args.target_versions),
-        "line_length": args.line_length,
-        "string_normalization": not args.skip_string_normalization,
-        "is_pyi": args.pyi,
-        "preview": args.preview,
-    }
+    target_versions = set(args.target_versions)
+    line_length: int = args.line_length
+    string_normalization: bool = not args.skip_string_normalization
+    is_pyi: bool = args.pyi
+    preview: bool = args.preview
 
     retv = 0
     for filename in args.filenames:
-        processor = BlackFormatter(**formatter_kwargs)
+        processor = BlackFormatter(
+            target_versions=target_versions,
+            line_length=line_length,
+            string_normalization=string_normalization,
+            is_pyi=is_pyi,
+            preview=preview,
+        )
         retv |= processor.process_file(
             filename,
             skip_errors=args.skip_errors,
