@@ -46,4 +46,3 @@ extend-safe-fixes = [
     # https://docs.astral.sh/ruff/rules/non-pep585-annotation/
     "UP006",
 ]
-isort.required-imports = [ "from __future__ import annotations" ]

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 __all__ = (
     "ON_OFF",
     "PYCON_CONTINUATION_PREFIX",
