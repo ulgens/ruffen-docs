@@ -15,12 +15,12 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.45.1
+    rev: v1.50.1
     hooks:
       - id: typos
 
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.21.1
+    rev: v2.29.3
     hooks:
       - id: pyproject-fmt
 
@@ -30,7 +30,7 @@ repos:
       - id: uv-lock
 
   - repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.5
+    rev: v6.3.0
     hooks:
       - id: rstcheck
 
